@@ -14,17 +14,29 @@ Here's what I realized after months of letting AI assistants loose on my codebas
 
 I spent most of my career on teams that released to production 100-200 times per week. You know what made that possible? Rock-solid git workflows. Code review processes. The ability to quickly understand what changed and why.
 
+:::margin-note
+This was at a company doing continuous deployment before it was trendy. We had automated everything, but the human review process was still the critical piece. Every change had to be understood by someone other than the author. Also, we all carried pagers and were on call for our own apps. Would you carry a pager for AI code you're generating today?
+:::
+
 Now I'm working solo with an AI assistant most of the time, and suddenly I need all those same team-scale practices. Because here's the thing nobody celebrates about AI coding: **keeping your mental model aligned with code you didn't write yourself is the hardest part.**
 
 When you write code, you know every decision, every tradeoff, every "I'll fix this later" comment. But when an AI generates 200 lines of TypeScript that _looks_ right but feels foreign? You're flying blind.
 
-Git becomes your quantum undo button for your repository. Not just for mistakes—though there will be plenty—but for understanding. Branching gives you multiple states to experiment with. Diffs show you exactly what changed. History tells you what was working before the AI got creative.
+:::inline-callout
+Git becomes your quantum undo button for your repository.
+:::
+
+Not just for mistakes—though there will be plenty—but for understanding. Branching gives you multiple states to experiment with. Diffs show you exactly what changed. History tells you what was working before the AI got creative.
 
 The tactics that work for high-velocity teams become essential even when you're working alone with an assistant.
 
 **Before this workflow:**
 
 I'd let AI make changes, and then stare at the output trying to understand what just happened. The code compiled. The tests passed. But if a customer asked me how the authentication flow worked, I'd have to say "I don't know" about something I supposedly created.
+
+:::margin-note
+Thankfully, I haven't put myself in this position yet but I had a few close calls. There were times that I've decided that I wasn't going to know how something worked though and was clear about this with my customer to help them feel more comfortable taking the AI reigns and learning to write front-end code for the first time.
+:::
 
 That's not acceptable. I never wanted to be the developer who couldn't explain their own codebase.
 
@@ -89,6 +101,10 @@ Ask yourself for each staged change: "Would I have made this choice? Can I expla
 - But be careful—rewriting history can delete your changes if you're not careful
 - Only rebase before you `git push` and share with others
 
-Treat every AI-generated change like a pull request from a colleague. Review it. Understand it. You're aren't a solo dev anymore ever. You're leading a team toward a goal.
+Treat every AI-generated change like a pull request from a colleague. Review it. Understand it.
+
+:::inline-callout
+You're never a solo dev anymore with AI. You're leading a team toward a goal.
+:::
 
 Know someone getting started with git and AI development? Please share this with them.
