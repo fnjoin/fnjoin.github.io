@@ -24,6 +24,16 @@ const parent = new monorepo.MonorepoTsProject({
     eslint: false,
     ...prettier,
 });
+
+// Configure Nx to watch content directory for build tasks
+const nxJson = parent.tryFindObjectFile("nx.json");
+if (nxJson) {
+    nxJson.addOverride("targetDefaults.build.inputs", [
+        "default",
+        "^default",
+        "{workspaceRoot}/content/**/*",
+    ]);
+}
 parent.gitignore.addPatterns("packages/gatsby-remark-tufte");
 parent.gitignore.addPatterns(".DS_Store");
 
