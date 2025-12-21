@@ -85,7 +85,7 @@ const nextjsBlog = new NextJsBlogTypescriptAppProject({
         "critters",
         "@types/eslint@^8",
         "@archieco/static-website-image-gen@workspace:*",
-        "@archieco/image-server",
+        "@archieco/image-server@workspace:*",
         "@jest/globals",
         "@types/hast",
         "@types/unist",
