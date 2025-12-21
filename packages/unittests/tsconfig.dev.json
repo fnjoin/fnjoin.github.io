@@ -29,6 +29,7 @@
       "jest"
     ],
     "moduleResolution": "node",
+    "skipLibCheck": true,
     "paths": {
       "@/*": [
         "./src/*"

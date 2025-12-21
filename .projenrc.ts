@@ -121,14 +121,15 @@ const imageServer = new TypeScriptAppProject({
     parent,
     sampleCode: true,
     ...prettier,
-    deps: ["sharp@latest", "express@latest", "yargs", "glob"],
+    deps: ["sharp@latest", "express@latest", "yargs", "glob@^8"],
     devDeps: [
         "@jest/globals",
         "@types/express",
         "@types/node",
         "@types/yargs",
         "@types/eslint@^8",
-        "@types/glob",
+        "@types/glob@^8",
+        "@types/minimatch",
     ],
     minNodeVersion: "v20.11.1",
     eslintOptions: {
@@ -143,6 +144,7 @@ const imageServer = new TypeScriptAppProject({
             target: "esnext",
             module: "nodenext",
             moduleResolution: TypeScriptModuleResolution.NODE_NEXT,
+            skipLibCheck: true,
         },
     },
 });
@@ -184,9 +186,11 @@ const staticImageGen = new TypeScriptAppProject({
     tsconfig: {
         compilerOptions: {
             target: "esnext",
-            module: "nodenext",
+            module: "esnext",
             esModuleInterop: true,
             lib: ["esnext"],
+            skipLibCheck: true,
+            moduleResolution: TypeScriptModuleResolution.NODE,
         },
     },
     devDeps: [
@@ -197,6 +201,7 @@ const staticImageGen = new TypeScriptAppProject({
         "@jest/globals",
     ],
 });
+staticImageGen.package.file.addOverride("type", "module");
 staticImageGen.addTask("image-gen", {
     steps: [
         {
@@ -223,6 +228,7 @@ const tests = new TypeScriptAppProject({
             types: ["node", "jest"],
             esModuleInterop: true,
             moduleResolution: TypeScriptModuleResolution.NODE,
+            skipLibCheck: true,
             // lib: ["esnext", "es2019", "es2020", "es2018"],
             paths: {
                 "@/*": ["./src/*"],
@@ -230,7 +236,12 @@ const tests = new TypeScriptAppProject({
         },
     },
     ...prettier,
-    devDeps: ["@jest/globals", "@types/hast", "@types/node"],
+    devDeps: [
+        "@jest/globals",
+        "@types/hast",
+        "@types/node",
+        "@types/minimatch",
+    ],
     deps: [
         "mdast-util-directive",
         "mdast-util-to-markdown",
@@ -246,6 +257,7 @@ const tests = new TypeScriptAppProject({
         "remark-frontmatter@latest",
         "remark-stringify@latest",
         "vfile-matter",
+        "vfile",
         "to-vfile",
         "unified@^11",
         "remark-directive@^3",

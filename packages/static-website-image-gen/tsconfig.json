@@ -12,7 +12,7 @@
     "lib": [
       "esnext"
     ],
-    "module": "nodenext",
+    "module": "esnext",
     "noEmitOnError": false,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
@@ -25,7 +25,9 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "stripInternal": true,
-    "target": "esnext"
+    "target": "esnext",
+    "skipLibCheck": true,
+    "moduleResolution": "node"
   },
   "include": [
     "src/**/*.ts"

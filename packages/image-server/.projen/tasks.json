@@ -120,13 +120,13 @@
       },
       "steps": [
         {
-          "exec": "pnpm dlx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@jest/globals,@types/express,@types/glob,@types/jest,@types/yargs,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,jest,prettier,ts-jest,typescript,express,glob,sharp,yargs"
+          "exec": "pnpm dlx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@jest/globals,@types/express,@types/jest,@types/minimatch,@types/yargs,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,jest,prettier,ts-jest,typescript,express,sharp,yargs"
         },
         {
           "exec": "pnpm i --no-frozen-lockfile"
         },
         {
-          "exec": "pnpm update @jest/globals @types/eslint @types/express @types/glob @types/jest @types/node @types/yargs @typescript-eslint/eslint-plugin @typescript-eslint/parser constructs eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit prettier projen ts-jest typescript express glob sharp yargs"
+          "exec": "pnpm update @jest/globals @types/eslint @types/express @types/glob @types/jest @types/minimatch @types/node @types/yargs @typescript-eslint/eslint-plugin @typescript-eslint/parser constructs eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit prettier projen ts-jest typescript express glob sharp yargs"
         },
         {
           "exec": "npx projen"

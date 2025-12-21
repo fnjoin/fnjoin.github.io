@@ -15,10 +15,15 @@
     },
     {
       "name": "@types/glob",
+      "version": "^8",
       "type": "build"
     },
     {
       "name": "@types/jest",
+      "type": "build"
+    },
+    {
+      "name": "@types/minimatch",
       "type": "build"
     },
     {
@@ -99,6 +104,7 @@
     },
     {
       "name": "glob",
+      "version": "^8",
       "type": "runtime"
     },
     {

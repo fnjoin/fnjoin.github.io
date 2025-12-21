@@ -1,6 +1,6 @@
+import fs from "fs/promises";
 import path from "path";
 import express from "express";
-import { glob } from "glob"; // Install with `npm install @types/glob glob`
 import sharp from "sharp";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
@@ -40,32 +40,40 @@ async function main() {
         const quality: number = parseInt(q as string, 10) || argv.quality;
 
         const requestedPath: string = path.join(rootFolder, req.path);
-        const baseName: string = path.basename(
+
+        // Use fs to find any file with the same basename but different extension
+        const dirPath = path.dirname(requestedPath);
+        const baseName = path.basename(
             requestedPath,
             path.extname(requestedPath),
         );
 
-        // Use glob to find any file with the same basename but different extension
-        const files = await glob(
-            `${path.dirname(requestedPath)}/${baseName}.*`,
-        );
+        try {
+            const dirFiles = await fs.readdir(dirPath);
+            const matchingFiles = dirFiles.filter(
+                (file) => path.basename(file, path.extname(file)) === baseName,
+            );
 
-        if (!files.length) {
-            console.log("File not found:", requestedPath);
-            console.log("Base name:", baseName);
-            console.log("Files:", files);
-            return res.status(404).send("File not found");
+            if (matchingFiles.length === 0) {
+                console.log("File not found:", requestedPath);
+                console.log("Base name:", baseName);
+                console.log("Directory files:", dirFiles);
+                return res.status(404).send("File not found");
+            }
+
+            // Assume the first match is the correct file
+            const originalImagePath = path.join(dirPath, matchingFiles[0]);
+
+            return await sharp(originalImagePath)
+                .resize(width)
+                .webp({ quality })
+                .toBuffer()
+                .then((data) => res.type("webp").send(data))
+                .catch((sharperr) => res.status(500).send(sharperr.message));
+        } catch (err) {
+            console.log("Directory read error:", err);
+            return res.status(404).send("Directory not found");
         }
-
-        // Assume the first match is the correct file
-        const originalImagePath: string = files[0];
-
-        return sharp(originalImagePath)
-            .resize(width)
-            .webp({ quality })
-            .toBuffer()
-            .then((data) => res.type("webp").send(data))
-            .catch((sharperr) => res.status(500).send(sharperr.message));
     });
 
     app.listen(port, () => {

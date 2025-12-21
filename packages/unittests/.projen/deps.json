@@ -13,6 +13,10 @@
       "type": "build"
     },
     {
+      "name": "@types/minimatch",
+      "type": "build"
+    },
+    {
       "name": "@types/node",
       "version": "^18",
       "type": "build"
@@ -161,6 +165,10 @@
     {
       "name": "unist-util-visit",
       "version": "^5",
+      "type": "runtime"
+    },
+    {
+      "name": "vfile",
       "type": "runtime"
     },
     {

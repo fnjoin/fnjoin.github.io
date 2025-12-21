@@ -34,7 +34,7 @@ export default function myUnifiedPluginHandlingYamlMatter() {
 
 // import { read } from "to-vfile";
 import { unified } from "unified";
-import { VFile } from "vfile-matter/lib";
+import { VFile } from "vfile";
 import rehypeStringify from "rehype-stringify";
 import remarkDirective from "remark-directive";
 import { myRemarkPlugin } from "../src";
