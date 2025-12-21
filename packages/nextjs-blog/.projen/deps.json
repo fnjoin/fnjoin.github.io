@@ -2,6 +2,7 @@
   "dependencies": [
     {
       "name": "@archieco/image-server",
+      "version": "workspace:*",
       "type": "build"
     },
     {

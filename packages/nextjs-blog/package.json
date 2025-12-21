@@ -19,7 +19,7 @@
     "watch": "npx projen watch"
   },
   "devDependencies": {
-    "@archieco/image-server": "^0.0.0",
+    "@archieco/image-server": "workspace:*",
     "@archieco/static-website-image-gen": "workspace:*",
     "@jest/globals": "^29.7.0",
     "@next/eslint-plugin-next": "^14",

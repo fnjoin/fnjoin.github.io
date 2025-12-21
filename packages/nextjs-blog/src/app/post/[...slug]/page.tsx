@@ -4,6 +4,7 @@ import React from "react";
 import Header from "../../_components/header";
 import Copyright from "@/app/_components/copy";
 import { PostBody } from "@/app/_components/post-body";
+import ScrollTracker from "@/app/_components/scrolltracking";
 import {
     Article,
     Author,
@@ -13,7 +14,6 @@ import {
     Tags,
 } from "@/lib/markdowncomponents";
 import { BlogRepository } from "@/lib/repository";
-import ScrollTracker from "@/app/_components/scrolltracking";
 
 export default async function Post({ params }: Params) {
     const repository = BlogRepository.fromCwd();
