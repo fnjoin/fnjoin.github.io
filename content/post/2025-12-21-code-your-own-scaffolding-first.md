@@ -3,6 +3,9 @@ title: Code Your Own Scaffolding First
 author: Archie Cowan
 subtitle: Write 200 lines yourself before asking AI for 2,000—your code becomes the perfect prompt
 date: 2025-12-21
+coverImage:
+    imageSrc: /img/code-your-own-scaffolding/head-img.png
+    caption: The scaffolding metaphor works on so many levels.
 tags: ["ai-coding", "scaffolding", "prompting"]
 ---
 

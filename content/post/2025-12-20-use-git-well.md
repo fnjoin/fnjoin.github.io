@@ -3,6 +3,9 @@ title: Use Git Well with AI Coding
 author: Archie Cowan
 subtitle: AI will make mistakes—git is how you recover from them instantly
 date: 2025-12-20
+coverImage:
+    imageSrc: /img/use-git-well/head-img.png
+    caption: The umbrella is git diff. It's not enough, but it's what we've got.
 tags: ["ai-coding", "git", "workflow"]
 ---
 
