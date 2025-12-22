@@ -5,7 +5,9 @@ subtitle: AI will make mistakes—git is how you recover from them instantly
 date: 2025-12-20
 coverImage:
     imageSrc: /img/use-git-well/head-img.png
-    caption: The umbrella is git diff. It's not enough, but it's what we've got.
+    caption: |
+        The umbrella is git diff. It's not enough, but it's what we've got. 
+        (Image credit: created using AI in the style of [xkcd](https://xkcd.com/))
 tags: ["ai-coding", "git", "workflow"]
 ---
 

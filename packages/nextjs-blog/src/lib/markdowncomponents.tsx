@@ -205,7 +205,20 @@ export function FigureFence(props: FigureFenceProps) {
                 </div>
                 <figcaption className="m-4 col-span-4 text-sm text-center">
                     {props.refnum && `${refLabel} ${props.refnum}: `}
-                    {props.caption}
+                    {props.caption && (
+                        <ReactMarkdown
+                            remarkPlugins={[
+                                remarkGfm,
+                                remarkDirective,
+                                myRemarkPlugin,
+                            ]}
+                            components={{
+                                p: ({ children }) => <span>{children}</span>, // Inline rendering for captions
+                            }}
+                        >
+                            {props.caption}
+                        </ReactMarkdown>
+                    )}
                 </figcaption>
             </figure>
         </>

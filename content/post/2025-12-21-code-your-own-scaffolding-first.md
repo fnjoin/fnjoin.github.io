@@ -5,7 +5,9 @@ subtitle: Write 200 lines yourself before asking AI for 2,000—your code become
 date: 2025-12-21
 coverImage:
     imageSrc: /img/code-your-own-scaffolding/head-img.png
-    caption: The scaffolding metaphor works on so many levels.
+    caption: |
+        The scaffolding metaphor works on so many levels. 
+        (Image credit, created using AI in the style of [xkcd](https://xkcd.com/))
 tags: ["ai-coding", "scaffolding", "prompting"]
 ---
 
