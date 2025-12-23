@@ -12,6 +12,8 @@ type Props = {
     excerpt: string;
     author?: Author;
     slug: string;
+    wordCount?: number;
+    readingTime?: number;
 };
 
 export function HeroPost({
@@ -21,6 +23,8 @@ export function HeroPost({
     excerpt,
     author,
     slug,
+    wordCount,
+    readingTime,
 }: Props) {
     console.log("slug", slug);
     return (
@@ -32,7 +36,7 @@ export function HeroPost({
             </div>
             <div className="md:grid md:grid-cols-2 md:gap-x-16 lg:gap-x-8 mb-20 md:mb-28">
                 <div>
-                    <h3 className="mb-4 text-4xl lg:text-5xl leading-tight">
+                    <h3 className="mb-2 text-4xl lg:text-5xl leading-tight">
                         <Link
                             as={`/${slug}`}
                             href="/[slug]"
@@ -41,6 +45,12 @@ export function HeroPost({
                             {title}
                         </Link>
                     </h3>
+                    {wordCount && readingTime && (
+                        <div className="text-xs text-gray-400 mb-4">
+                            {wordCount.toLocaleString()} words · {readingTime}{" "}
+                            min read
+                        </div>
+                    )}
                     <div className="mb-4 md:mb-0 text-lg">
                         <DateFormatter dateString={date} />
                     </div>

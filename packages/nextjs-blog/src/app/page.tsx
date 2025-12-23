@@ -51,6 +51,10 @@ const BlogPosts: React.FC<BlogPostsProps> = ({ posts }) => {
                         <p className="mt-2 text-gray-500 text-sm">
                             {post.tags.map((tag) => `#${tag} `)}
                         </p>
+                        <div className="mt-1 text-xs text-gray-400">
+                            {post.wordCount.toLocaleString()} words ·{" "}
+                            {post.readingTime} min read
+                        </div>
                     </div>
                     <div className="md:w-1/3">
                         {post.coverImage?.imageSrc && (
@@ -85,6 +89,8 @@ export default function Index() {
                     author={heroPost.author_detail}
                     slug={heroPost.slug}
                     excerpt={heroPost.excerpt || ""}
+                    wordCount={heroPost.wordCount}
+                    readingTime={heroPost.readingTime}
                 />
 
                 <BlogPosts posts={morePosts} />

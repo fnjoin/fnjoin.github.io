@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import matter from "gray-matter";
 import { crawlDirectories } from "./fileutil";
+import { calculateReadingStats } from "./reading-stats";
 import { AuthorProps, MyPost } from "@/interfaces/mypost";
 
 function getAuthorMarkdown(fullPath: string): AuthorProps {
@@ -13,7 +14,16 @@ function getAuthorMarkdown(fullPath: string): AuthorProps {
 function getMarkdown(fullPath: string): MyPost {
     const fileContents = fs.readFileSync(fullPath, "utf8");
     const { data, content } = matter(fileContents);
-    return { ...data, content } as MyPost;
+
+    // Calculate reading stats
+    const { wordCount, readingTime } = calculateReadingStats(content);
+
+    return {
+        ...data,
+        content,
+        wordCount,
+        readingTime,
+    } as MyPost;
 }
 
 export interface BlogRepositoryProps {

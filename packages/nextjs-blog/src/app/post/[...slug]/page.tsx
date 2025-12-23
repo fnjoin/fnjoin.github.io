@@ -4,6 +4,7 @@ import React from "react";
 import Header from "../../_components/header";
 import Copyright from "@/app/_components/copy";
 import { PostBody } from "@/app/_components/post-body";
+import { ReadingStats } from "@/app/_components/reading-stats";
 import ScrollTracker from "@/app/_components/scrolltracking";
 import {
     Article,
@@ -29,6 +30,11 @@ export default async function Post({ params }: Params) {
             <Article>
                 <Tags tags={post.tags} />
                 <Heading1>{post.title}</Heading1>
+                <ReadingStats
+                    wordCount={post.wordCount}
+                    readingTime={post.readingTime}
+                    className="mb-4"
+                />
                 <Author {...post.author_detail} />
                 {post.coverImage && (
                     <FigureFence caption={post.coverImage.caption}>

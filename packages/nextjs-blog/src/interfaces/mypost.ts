@@ -18,6 +18,8 @@ export interface PostWithAuthorHandles {
         [ns: string]: string;
     };
     content_flags?: string[];
+    wordCount: number;
+    readingTime: number; // in minutes
 }
 
 export interface MyPost extends PostWithAuthorHandles {

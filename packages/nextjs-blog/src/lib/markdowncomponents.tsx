@@ -54,14 +54,14 @@ export interface TagProps {
     tags?: string[];
 }
 export function Tags({ tags }: TagProps) {
-    if (!tags) {
+    if (!tags || tags.length === 0) {
         return <></>;
     }
     return (
         <div className={`m-2 ${gridStyle}`}>
             <div className="flex gap-1 flex-wrap text-sm justify-center">
                 <span>Tags:</span>
-                {tags?.map((tag, idx) => (
+                {tags.map((tag, idx) => (
                     <span
                         key={idx}
                         className="bg-gray-100 rounded-full px-3 font-semibold text-gray-600"
