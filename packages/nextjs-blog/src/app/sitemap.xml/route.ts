@@ -12,11 +12,19 @@ function getPostsForSitemap(): MetadataRoute.Sitemap {
         if (!path.endsWith("/")) {
             path += "/";
         }
+
+        // Format date as yyyy-mm-dd for sitemap
+        const formatDate = (date: string | Date) => {
+            if (!date) return new Date().toISOString().split("T")[0];
+            const d = new Date(date);
+            return d.toISOString().split("T")[0];
+        };
+
         return {
             url: `https://www.fnjoin.com/${path}`,
-            lastModified: page.date,
+            lastModified: formatDate(page.date),
             changeFrequency: "daily",
-            priority: 10,
+            priority: 0.5,
         };
     });
 }
