@@ -36,7 +36,7 @@ export function Paragraph({ children }: any) {
     return (
         // TODO if this a p tag, then we can't have nested divs under it, also figures aren't allowed
         // maybe we can check the children and conditionally render as a paragraph if the children are just text, does this matter?
-        <div className={`m-2 ${gridStyle}`}>{children}</div>
+        <div className={`mr-2 mb-2 ${gridStyle}`}>{children}</div>
     );
 }
 
