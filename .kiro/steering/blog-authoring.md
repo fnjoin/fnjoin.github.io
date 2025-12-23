@@ -89,6 +89,13 @@ Current authors:
 -   **Metaphors**: Ground in familiar concepts (IaC, cattle vs pets)
 -   **Show, don't tell**: Include examples, not just descriptions
 
+### Cliches to avoid
+
+Avoid using these cliches:
+
+-   Here's the thing nobody tells you about ...
+-   Here's the kicker ...
+
 ## Technical Content Patterns
 
 ### Code Blocks
