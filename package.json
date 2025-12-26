@@ -71,6 +71,7 @@
       "packages/image-server",
       "packages/static-website-image-gen",
       "packages/nextjs-blog",
+      "packages/titlesearch",
       "packages/unittests"
     ]
   },

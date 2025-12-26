@@ -306,6 +306,39 @@ tests.package.file.addOverride("type", "module");
 const [{ exec: projenrcCommand = "" }] = tests.defaultTask!.steps;
 tests.defaultTask!.reset(projenrcCommand.replace("ts-node", "ts-node-esm"));
 
+new TypeScriptAppProject({
+    name: "titlesearch",
+    outdir: "packages/titlesearch",
+    packageManager,
+    defaultReleaseBranch,
+    parent,
+    sampleCode: false,
+    ...prettier,
+    deps: ["commander"],
+    devDeps: ["@types/node"],
+    bin: {
+        titlesearch: "./lib/cli.js",
+    },
+    tsconfig: {
+        compilerOptions: {
+            target: "es2022",
+            module: "nodenext",
+            moduleResolution: TypeScriptModuleResolution.NODE_NEXT,
+            skipLibCheck: true,
+            esModuleInterop: true,
+            lib: ["es2022"],
+        },
+    },
+});
+
+// Configure as ES module
+const titlesearchPackage = parent.tryFindObjectFile(
+    "packages/titlesearch/package.json",
+);
+if (titlesearchPackage) {
+    titlesearchPackage.addOverride("type", "module");
+}
+
 // https://gist.github.com/doublecompile/324afb33b6038526705dfebb3b529e42
 
 parent.synth();
