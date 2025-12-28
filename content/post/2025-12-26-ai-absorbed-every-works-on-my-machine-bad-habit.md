@@ -27,7 +27,7 @@ I realized LLMs have learned our worst developer habits. They've been trained on
 
 The LLM declares it is done with a task but when I go to test it I find that it doesn't actually work end to end. It's written tons of unit and property tests but the integration of the parts is incomplete. A single failing test on an API endpoint would have detected a missing integration point in the plan, saving me a bunch of frustration.
 
-This is another place to apply [a failing test is worth a thousand prompts](/2025-12-25-a-failing-test-is-worth-a-thousand-prompts/).
+This is another place to apply [a failing test is worth a thousand prompts](/post/2025-12-25-a-failing-test-is-worth-a-thousand-prompts/).
 
 At planning time, think of well targeted integration tests. They don't need to verify a bunch of functionality, that belongs in more targeted tests. They just need to prove that the right APIs are called and working together. They should be implemented early in your plan and the tasks should clearly label whether the test is expected to pass at that point.
 

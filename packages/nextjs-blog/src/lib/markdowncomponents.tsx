@@ -9,9 +9,11 @@ import remarkDirective from "remark-directive";
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 import markdownStyles from "@/app/_components/markdown-styles.module.css";
+import { MermaidDiagram } from "@/components/MermaidDiagram";
 import { AuthorProps, MyPost } from "@/interfaces/mypost";
 import { myRemarkPlugin } from "@/lib/mydirective";
 import { extractToc } from "@/lib/myToc";
+import { remarkMermaid } from "@/lib/remark-mermaid";
 
 const projectRoot = process.cwd();
 
@@ -303,6 +305,7 @@ export function TocFromMarkdown({ markdown }: { markdown: string }) {
                 remarkParse,
                 remarkDirective,
                 myRemarkPlugin,
+                remarkMermaid,
                 extractToc,
             ]}
         >
@@ -319,6 +322,7 @@ export function ArticleBodyFromMarkdown({ art }: { art: MyPost }) {
                 remarkGfm,
                 remarkDirective,
                 myRemarkPlugin,
+                remarkMermaid,
             ]}
             // rehypePlugins={[]}
             urlTransform={(url) => {
@@ -375,6 +379,20 @@ export function ArticleBodyFromMarkdown({ art }: { art: MyPost }) {
                     );
                 },
                 div: ({ node, ...rest }) => {
+                    if (node?.properties["data-element"] === "mermaid") {
+                        return (
+                            <div className={`m-2 ${gridStyle}`}>
+                                <MermaidDiagram
+                                    chart={
+                                        node?.properties[
+                                            "data-mermaid"
+                                        ] as string
+                                    }
+                                    className="flex justify-center"
+                                />
+                            </div>
+                        );
+                    }
                     if (node?.properties["data-element"] === "inline-callout") {
                         // console.log("page.tsx", node, rest);
                         return <InlineCallout {...rest} />;
@@ -420,11 +438,45 @@ export function ArticleBodyFromMarkdown({ art }: { art: MyPost }) {
                         />
                     );
                 },
-                pre: ({ node, ...rest }) => {
+                pre: ({ children }) => {
+                    // Check if this pre contains a mermaid code block
+                    const codeElement = React.Children.toArray(children).find(
+                        (child: any) =>
+                            child?.props?.node?.properties?.["data-element"] ===
+                            "mermaid",
+                    );
+
+                    // If it contains mermaid, just render the children without pre wrapper
+                    if (codeElement) {
+                        return <>{children}</>;
+                    }
+
+                    // Otherwise, render normal pre with styling
+                    return <pre className={`m-2 ${gridStyle}`}>{children}</pre>;
+                },
+                code: ({ node, className, children, ...rest }) => {
+                    // Check if this is a mermaid code block that was transformed
+                    if (node?.properties?.["data-element"] === "mermaid") {
+                        // This should be handled by the div component, but just in case
+                        return (
+                            <div className={`m-2 ${gridStyle}`}>
+                                <MermaidDiagram
+                                    chart={
+                                        node?.properties[
+                                            "data-mermaid"
+                                        ] as string
+                                    }
+                                    className="flex justify-center"
+                                />
+                            </div>
+                        );
+                    }
+
+                    // Regular inline code
                     return (
-                        <pre className={`m-2 ${gridStyle}`}>
-                            {rest.children}
-                        </pre>
+                        <code className={className} {...rest}>
+                            {children}
+                        </code>
                     );
                 },
             }}

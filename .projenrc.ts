@@ -90,6 +90,7 @@ const nextjsBlog = new NextJsBlogTypescriptAppProject({
         "xml-js",
         "strip-markdown",
         "@next/third-parties", // google analytics
+        "mermaid@^10.6.1",
     ],
     devDeps: [
         "critters",
@@ -100,6 +101,7 @@ const nextjsBlog = new NextJsBlogTypescriptAppProject({
         "@types/hast",
         "@types/unist",
         "@types/node",
+        "@types/mdast",
     ],
 
     sampleCode: true,

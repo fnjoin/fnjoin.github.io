@@ -33,6 +33,10 @@
       "type": "build"
     },
     {
+      "name": "@types/mdast",
+      "type": "build"
+    },
+    {
       "name": "@types/node",
       "version": "^18",
       "type": "build"
@@ -205,6 +209,11 @@
     },
     {
       "name": "mdast-util-toc",
+      "type": "runtime"
+    },
+    {
+      "name": "mermaid",
+      "version": "^10.6.1",
       "type": "runtime"
     },
     {

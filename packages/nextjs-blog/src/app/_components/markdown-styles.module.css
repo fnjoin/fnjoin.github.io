@@ -18,6 +18,14 @@
     @apply col-start-4 col-end-10 col-span-6;
 }
 
+/* Mermaid diagrams should span wider and not inherit pre styles */
+.article .mermaid-diagram {
+    @apply col-start-2 col-end-12 col-span-10;
+    font-family: inherit !important;
+    font-size: inherit !important;
+    line-height: normal !important;
+}
+
 .article .margin-note {
     @apply md:col-start-10 md:col-end-13 md:col-span-3 md:p-3 md:row-span-3;
 }

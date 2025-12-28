@@ -70,7 +70,7 @@ One question changed his mind: "Why would I invest effort building an admin inte
 
 A team was evaluating a vendor for a system they'd couple with to support what they did for other tech teams. The evaluation was taking months. When they finally presented what they knew about the product to the other architects, we could see a crystal clear problem that broke the deal.
 
-The vendor updated on a 6-month release cycle. We deployed 50+ times a week.
+The vendor made software releases on a 6-month release cycle. We deployed 50-200 times a week.
 
 "Why would we couple our highly agile, continuously released system with a dependency that updates twice a year? What conflicts will that create?" I asked.
 

@@ -91,10 +91,15 @@ Current authors:
 
 ### Cliches to avoid
 
-Avoid using these cliches:
+Avoid using these overused phrases:
 
 -   Here's the thing nobody tells you about ...
 -   Here's the kicker ...
+-   You won't believe ...
+-   This one weird trick ...
+-   The secret that [industry] doesn't want you to know ...
+
+**Why to avoid**: These phrases have become clickbait cliches that make content sound sensational rather than authentic. Use more natural, conversational transitions instead.
 
 ## Technical Content Patterns
 

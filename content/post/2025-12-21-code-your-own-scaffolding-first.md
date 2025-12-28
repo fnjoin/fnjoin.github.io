@@ -43,7 +43,7 @@ My first prompt often looks like this. I know what modules I want in my reposito
 To be fair, for this to work, my steering/rule files make it clear how I want Projen to be used to complete this task.
 :::
 
-30 seconds later: complete project structure with testing, linting, build tools, dependency management—all configured and ready. When I ask the AI to build features now, it already knows we're using TypeScript, it sees the component structure, it understands the deployment model. It's like the difference between explaining directions to someone who can see the map versus someone who's blindfolded and spinning in circles.
+Less than a second later: complete project structure with testing, linting, build tools, dependency management—all configured and ready. When I ask the AI to build features now, it already knows we're using TypeScript, it sees the component structure, it understands the deployment model. It's like the difference between explaining directions to someone who can see the map versus someone who's blindfolded and spinning in circles.
 
 The difference is dramatic.
 
