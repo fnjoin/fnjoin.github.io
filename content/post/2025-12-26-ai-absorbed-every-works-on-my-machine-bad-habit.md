@@ -1,5 +1,5 @@
 ---
-title: AI Absorbed Every 'Works on My Machine' Bad Habit
+title: "AI Coding Tool Tips: AI Absorbed Every 'Works on My Machine' Bad Habit"
 author: Archie Cowan
 subtitle: AI will claim it's finished when it's 80% done—end-to-end tests tell the truth
 date: 2025-12-26

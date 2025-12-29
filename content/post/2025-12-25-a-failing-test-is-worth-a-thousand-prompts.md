@@ -1,5 +1,5 @@
 ---
-title: A failing test is worth a thousand prompts
+title: "AI Coding Tool Tips: A failing test is worth a thousand prompts"
 author: Archie Cowan
 subtitle: Stop writing paragraphs explaining what you want—write one failing test instead
 date: 2025-12-25

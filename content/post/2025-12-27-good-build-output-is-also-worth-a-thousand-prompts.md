@@ -1,5 +1,5 @@
 ---
-title: Good build output is also worth a thousand prompts
+title: "AI Coding Tool Tips: Good build output is also worth a thousand prompts"
 author: Archie Cowan
 subtitle: Your build system becomes an automatic AI code reviewer when it fails on bad changes
 date: 2025-12-27

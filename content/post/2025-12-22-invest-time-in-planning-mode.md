@@ -1,5 +1,5 @@
 ---
-title: Why Your AI Coding Outputs Suck
+title: "AI Coding Tool Tips: Why Your AI Coding Outputs Suck"
 author: Archie Cowan
 subtitle: And how planning mode fixes everything
 date: 2025-12-22

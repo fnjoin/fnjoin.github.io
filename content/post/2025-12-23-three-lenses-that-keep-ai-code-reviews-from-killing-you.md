@@ -1,5 +1,5 @@
 ---
-title: Three Lenses That Keep AI Code Reviews From Killing You
+title: "AI Coding Tool Tips: Three Lenses That Keep AI Code Reviews From Killing You"
 author: Archie Cowan
 subtitle: The moment you stop reading AI's diffs is the moment it breaks your architecture
 date: 2025-12-23

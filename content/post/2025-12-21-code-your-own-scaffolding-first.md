@@ -1,5 +1,5 @@
 ---
-title: Code Your Own Scaffolding First
+title: "AI Coding Tool Tips: Code Your Own Scaffolding First"
 author: Archie Cowan
 subtitle: Write 200 lines yourself before asking AI for 2,000—your code becomes the perfect prompt
 date: 2025-12-21

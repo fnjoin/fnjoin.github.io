@@ -1,6 +1,6 @@
 ---
 title: |
-    AI Coding with Leonard Shelby: 7 types of things I put in my rule files.
+    AI Coding Tool Tips: 7 types of things I put in my rule files.
 author: Archie Cowan
 subtitle: Why your AI needs Polaroids, notes, and tattoos to remember how you work
 date: 2025-12-24

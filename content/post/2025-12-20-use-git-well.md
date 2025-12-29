@@ -1,5 +1,5 @@
 ---
-title: Use Git Well with AI Coding
+title: "AI Coding Tool Tips: Use Git Well"
 author: Archie Cowan
 subtitle: AI will make mistakes—git is how you recover from them instantly
 date: 2025-12-20

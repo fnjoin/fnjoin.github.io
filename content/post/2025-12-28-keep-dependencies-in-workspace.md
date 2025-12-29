@@ -1,5 +1,5 @@
 ---
-title: Keep Dependencies in Your Workspace
+title: "AI Coding Tool Tips: Keep Dependencies in Your Workspace"
 author: Archie Cowan
 subtitle: Copy dependency source code into your repo—AI reads it better than it queries APIs
 date: 2025-12-28
