@@ -184,6 +184,7 @@ export interface FigureFenceProps {
     reflabels?: {
         [label: string]: string;
     };
+    stylePreset?: string;
 }
 export function FigureFence(props: FigureFenceProps) {
     let refLabel = "Figure";
@@ -192,6 +193,20 @@ export function FigureFence(props: FigureFenceProps) {
     } else {
         logMissingFigureNS();
     }
+
+    // Define style presets
+    const stylePresets: { [key: string]: string } = {
+        bordered: "border border-gray-200 rounded-xl shadow-lg p-4",
+        elevated: "rounded-xl shadow-2xl p-2",
+        minimal: "border-l-4 border-blue-500 pl-4",
+        card: "border border-gray-200 rounded-lg shadow-md p-6 bg-white",
+    };
+
+    // Get the CSS classes for the selected preset
+    const presetClasses =
+        props.stylePreset && stylePresets[props.stylePreset]
+            ? stylePresets[props.stylePreset]
+            : "";
 
     return (
         <>
@@ -202,7 +217,9 @@ export function FigureFence(props: FigureFenceProps) {
                         {props.title}
                     </div>
                 )}
-                <div className="col-start-1 col-end-13 col-span-12 ">
+                <div
+                    className={`col-start-1 col-end-13 col-span-12 ${presetClasses}`}
+                >
                     {props.children}
                 </div>
                 <figcaption className="m-4 col-span-4 text-sm text-center">

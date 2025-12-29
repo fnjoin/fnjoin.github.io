@@ -33,6 +33,30 @@ There should be an image here:
 ![A fun picture of an astronaut rendered by stable diffusion.](/assets/astronaut.jpg)
 :::
 
+Here's the same image with the "elevated" style preset:
+
+:::figure-fence{id="img:astronaut-elevated" caption="Same astronaut with elevated styling." stylePreset="elevated"}
+![A fun picture of an astronaut rendered by stable diffusion.](/assets/astronaut.jpg)
+:::
+
+And here's a code example with the "bordered" style preset:
+
+:::figure-fence{id="code:styled-example" title="Styled Code Example" caption="This code block has a border and shadow styling." stylePreset="bordered"}
+
+```typescript
+export function StyledComponent() {
+    return <div className="styled-content">Hello World</div>;
+}
+```
+
+:::
+
+Here's a figure with the "card" style preset:
+
+:::figure-fence{id="img:card-style" caption="This figure uses the card style preset." stylePreset="card"}
+![A fun picture of an astronaut rendered by stable diffusion.](/assets/astronaut.jpg)
+:::
+
 :::margin-note
 Donec commapellentesque lectus non sapien laoreet aliquam est vitae risus. Duis tempus quoties metus commodo blandit. Duis pulvinar, est et risus sagittis semper. Sed volutpat orci quis nisi. Nullam nec sem vel ipsum euismod pellentesque. Sed dui orci, facilisis sed, pharetra semper, placerat vel, justo. Cras sollicitudin adipiscing eros. Vestibulum eget orci.
 :::
