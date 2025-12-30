@@ -3,6 +3,7 @@ import * as path from "path";
 import matter from "gray-matter";
 import imageSize from "image-size";
 import Image from "next/image";
+import Link from "next/link";
 import React, { PropsWithChildren } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkDirective from "remark-directive";
@@ -64,12 +65,13 @@ export function Tags({ tags }: TagProps) {
             <div className="flex gap-1 flex-wrap text-sm justify-center">
                 <span>Tags:</span>
                 {tags.map((tag, idx) => (
-                    <span
+                    <Link
                         key={idx}
-                        className="bg-gray-100 rounded-full px-3 font-semibold text-gray-600"
+                        href={`/tags/${tag}`}
+                        className="bg-gray-100 rounded-full px-3 font-semibold text-gray-600 hover:bg-gray-200 transition-colors"
                     >
                         #{tag}
-                    </span>
+                    </Link>
                 ))}
             </div>
         </div>

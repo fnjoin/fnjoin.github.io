@@ -48,9 +48,17 @@ const BlogPosts: React.FC<BlogPostsProps> = ({ posts }) => {
                             </Link>
                         </h2>
                         <p className="text-gray-700">{post.excerpt}</p>
-                        <p className="mt-2 text-gray-500 text-sm">
-                            {post.tags.map((tag) => `#${tag} `)}
-                        </p>
+                        <div className="mt-2 flex flex-wrap gap-1">
+                            {post.tags.map((tag) => (
+                                <Link
+                                    key={tag}
+                                    href={`/tags/${tag}`}
+                                    className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors"
+                                >
+                                    #{tag}
+                                </Link>
+                            ))}
+                        </div>
                         <div className="mt-1 text-xs text-gray-400">
                             {post.wordCount.toLocaleString()} words ·{" "}
                             {post.readingTime} min read
