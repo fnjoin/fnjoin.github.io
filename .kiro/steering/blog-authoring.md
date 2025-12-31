@@ -225,6 +225,21 @@ Avoid using these overused phrases:
 
 The site redirects `www.fnjoin.com` to `fnjoin.com`, so using the apex domain directly prevents unnecessary redirects that can impact SEO and page load times.
 
+### Tag Page SEO Strategy
+
+Tag pages are automatically marked with `noindex` until they have custom content to prevent thin content issues:
+
+-   **Auto-generated tag pages**: `robots: { index: false, follow: true }` - Just lists of posts
+-   **Custom tag pages**: `robots: { index: true, follow: true }` - Have dedicated content in `content/tag/tagname.md`
+
+To create indexable tag content:
+
+1. Create `content/tag/your-tag-name.md` with frontmatter and content
+2. The tag page will automatically become indexable
+3. Custom content appears above the post list
+
+This prevents search engines from seeing auto-generated tag pages as thin content while allowing rich tag pages to be indexed.
+
 ### Code Blocks
 
 Use fenced code blocks with language specification:

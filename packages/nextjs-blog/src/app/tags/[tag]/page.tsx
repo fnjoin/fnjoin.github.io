@@ -35,9 +35,18 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         };
     }
 
+    // Check if this tag has custom content
+    const tagContent = getTagContent(tag);
+    const hasCustomContent = tagContent !== null;
+
     return {
+        metadataBase: new URL("https://fnjoin.com"),
         title: `Posts tagged with "${tag}"`,
         description: `All blog posts tagged with ${tag}`,
+        robots: {
+            index: hasCustomContent, // Only index if there's custom content
+            follow: true,
+        },
     };
 }
 
