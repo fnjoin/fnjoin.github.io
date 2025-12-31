@@ -60,15 +60,15 @@ export function generateMetadata({ params }: Params): Metadata {
 
     if (post.ogImage?.url || post.coverImage?.imageSrc) {
         return {
-            metadataBase: new URL("https://www.fnjoin.com"),
+            metadataBase: new URL("https://fnjoin.com"),
             title,
             description: post.excerpt,
             alternates: {
-                canonical: `https://www.fnjoin.com/${post.slug}/`,
+                canonical: `https://fnjoin.com/${post.slug}/`,
             },
             openGraph: {
                 title,
-                url: `https://www.fnjoin.com/${post.slug}/`,
+                url: `https://fnjoin.com/${post.slug}/`,
                 images: post.ogImage?.url
                     ? [post.ogImage.url]
                     : post.coverImage?.imageSrc
@@ -79,15 +79,15 @@ export function generateMetadata({ params }: Params): Metadata {
     }
 
     return {
-        metadataBase: new URL("https://www.fnjoin.com"),
+        metadataBase: new URL("https://fnjoin.com"),
         title,
         description: post.excerpt,
         alternates: {
-            canonical: `https://www.fnjoin.com/${post.slug}/`,
+            canonical: `https://fnjoin.com/${post.slug}/`,
         },
         openGraph: {
             title,
-            url: `https://www.fnjoin.com/${post.slug}/`,
+            url: `https://fnjoin.com/${post.slug}/`,
         },
     };
 }

@@ -21,7 +21,7 @@ function getPostsForSitemap(): MetadataRoute.Sitemap {
         };
 
         return {
-            url: `https://www.fnjoin.com/${path}`,
+            url: `https://fnjoin.com/${path}`,
             lastModified: formatDate(page.date),
             changeFrequency: "daily",
             priority: 0.5,

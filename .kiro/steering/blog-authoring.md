@@ -117,12 +117,12 @@ The frontmatter automatically generates these HTML meta tags:
 <!-- From ogImage or coverImage -->
 <meta
     property="og:image"
-    content="https://www.fnjoin.com/img/post-slug/social.webp"
+    content="https://fnjoin.com/img/post-slug/social.webp"
 />
-<meta property="og:url" content="https://www.fnjoin.com/post/post-slug/" />
+<meta property="og:url" content="https://fnjoin.com/post/post-slug/" />
 
 <!-- Canonical URL (with trailing slash) -->
-<link rel="canonical" href="https://www.fnjoin.com/post/post-slug/" />
+<link rel="canonical" href="https://fnjoin.com/post/post-slug/" />
 ```
 
 #### Excerpt Writing Guidelines
@@ -212,6 +212,18 @@ Avoid using these overused phrases:
 **Why to avoid**: These phrases have become clickbait cliches that make content sound sensational rather than authentic. Use more natural, conversational transitions instead.
 
 ## Technical Content Patterns
+
+### URL Convention
+
+**Important**: All URLs use the apex domain `fnjoin.com` without the `www` subdomain to avoid 301 redirects. This applies to:
+
+-   Sitemap URLs
+-   OpenGraph URLs (`og:url`)
+-   Canonical URLs
+-   RSS feed URLs
+-   All internal references
+
+The site redirects `www.fnjoin.com` to `fnjoin.com`, so using the apex domain directly prevents unnecessary redirects that can impact SEO and page load times.
 
 ### Code Blocks
 

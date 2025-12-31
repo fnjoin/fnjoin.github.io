@@ -76,11 +76,11 @@ export function generateMetadata({ params }: Params): Metadata {
     const description = post.excerpt;
 
     return {
-        metadataBase: new URL("https://www.fnjoin.com"),
+        metadataBase: new URL("https://fnjoin.com"),
         title,
         description, // note, if this is empty, no description is included
         alternates: {
-            canonical: `https://www.fnjoin.com/${post.slug}/`,
+            canonical: `https://fnjoin.com/${post.slug}/`,
         },
 
         robots: {
@@ -90,7 +90,7 @@ export function generateMetadata({ params }: Params): Metadata {
         openGraph: {
             title,
             description,
-            url: `https://www.fnjoin.com/${post.slug}/`,
+            url: `https://fnjoin.com/${post.slug}/`,
             images: post.ogImage?.url
                 ? [post.ogImage.url]
                 : post.coverImage?.imageSrc

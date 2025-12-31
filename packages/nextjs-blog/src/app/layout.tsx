@@ -13,13 +13,13 @@ const description =
     "We are responsible for hundreds of thousands of deployments to the cloud through automation. Learn some of these best practices.";
 
 export const metadata: Metadata = {
-    metadataBase: new URL("https://www.fnjoin.com"),
+    metadataBase: new URL("https://fnjoin.com"),
     title,
     description,
     openGraph: {
         title,
         description,
-        url: "https://www.fnjoin.com/",
+        url: "https://fnjoin.com/",
     },
 
     twitter: {
@@ -75,7 +75,7 @@ export default function RootLayout({
                 <meta name="theme-color" content="#2563eb" />
                 <link
                     rel="alternate"
-                    href="https://www.fnjoin.com/index.xml"
+                    href="https://fnjoin.com/index.xml"
                     type="application/rss+xml"
                     title="fn:join"
                 />

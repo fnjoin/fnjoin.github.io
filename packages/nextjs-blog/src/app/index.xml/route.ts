@@ -66,7 +66,7 @@ function getRSS() {
             },
             channel: {
                 title: { _text: "fn:join" },
-                link: { _text: "https://www.fnjoin.com/" },
+                link: { _text: "https://fnjoin.com/" },
                 description: { _text: "Recent content on fn:join" },
                 managingEditor: {
                     _text: "contact@fnjoin.com (Salman Malik, Archie Cowan)",
@@ -77,7 +77,7 @@ function getRSS() {
                 lastBuildDate: { _text: formatDateForRSS(new Date()) },
                 "atom:link": {
                     _attributes: {
-                        href: "https://www.fnjoin.com/index.xml",
+                        href: "https://fnjoin.com/index.xml",
                         rel: "self",
                         type: "application/rss+xml",
                     },
@@ -86,7 +86,7 @@ function getRSS() {
                     title: { _text: post.title },
                     link: {
                         _text:
-                            `https://www.fnjoin.com/${post.slug}` +
+                            `https://fnjoin.com/${post.slug}` +
                             (post.slug.endsWith("/") ? "" : "/"),
                     },
                     description: {
@@ -99,7 +99,7 @@ function getRSS() {
                     pubDate: { _text: formatDateForRSS(post.date) },
                     guid: {
                         _text:
-                            `https://www.fnjoin.com/${post.slug}` +
+                            `https://fnjoin.com/${post.slug}` +
                             (post.slug.endsWith("/") ? "" : "/"),
                     },
                 })),
