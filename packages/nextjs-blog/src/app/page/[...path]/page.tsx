@@ -60,8 +60,12 @@ export function generateMetadata({ params }: Params): Metadata {
 
     if (post.ogImage?.url) {
         return {
+            metadataBase: new URL("https://www.fnjoin.com"),
             title,
             description: post.excerpt,
+            alternates: {
+                canonical: `https://www.fnjoin.com/${post.slug}/`,
+            },
             openGraph: {
                 title,
                 images: [post.ogImage?.url],
@@ -70,8 +74,12 @@ export function generateMetadata({ params }: Params): Metadata {
     }
 
     return {
+        metadataBase: new URL("https://www.fnjoin.com"),
         title,
         description: post.excerpt,
+        alternates: {
+            canonical: `https://www.fnjoin.com/${post.slug}/`,
+        },
         openGraph: {
             title,
         },

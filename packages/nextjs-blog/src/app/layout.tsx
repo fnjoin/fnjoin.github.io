@@ -74,7 +74,7 @@ export default function RootLayout({
                 <meta name="theme-color" content="#2563eb" />
                 <link
                     rel="alternate"
-                    href="https://fnjoin.com/index.xml"
+                    href="https://www.fnjoin.com/index.xml"
                     type="application/rss+xml"
                     title="fn:join"
                 />

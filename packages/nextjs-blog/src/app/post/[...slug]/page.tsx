@@ -80,7 +80,7 @@ export function generateMetadata({ params }: Params): Metadata {
         title,
         description, // note, if this is empty, no description is included
         alternates: {
-            canonical: `https://fnjoin.com/${post.slug}`,
+            canonical: `https://www.fnjoin.com/${post.slug}/`,
         },
 
         robots: {
