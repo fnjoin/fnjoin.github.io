@@ -2,6 +2,7 @@
 title: "AI Coding Tool Tips: Why Your AI Coding Outputs Suck"
 author: Archie Cowan
 subtitle: And how planning mode fixes everything
+excerpt: Discover why jumping straight into "build me X" leads to 2,000 lines of wrong code. Learn the three levels of AI planning that transform vague prompts into precise builds, and why the fastest developers invest time upfront in planning mode.
 date: 2025-12-22
 coverImage:
     imageSrc: /img/invest-time-in-planning-mode/head-img.png

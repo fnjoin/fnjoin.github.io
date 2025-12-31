@@ -2,6 +2,7 @@
 title: "AI Coding Tool Tips: Good build output is also worth a thousand prompts"
 author: Archie Cowan
 subtitle: Your build system becomes an automatic AI code reviewer when it fails on bad changes
+excerpt: Turn your build system into your most reliable code reviewer. Learn how smart builds catch AI mistakes that compile but break in production, and why dependency-aware tools like Nx speed up your AI coding iterations dramatically.
 date: 2025-12-27
 coverImage:
     imageSrc: /img/2025-12-27-good-build-output-is-also-worth-a-thousand-prompts/head-img.png

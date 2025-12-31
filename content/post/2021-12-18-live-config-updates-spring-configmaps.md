@@ -2,21 +2,20 @@
 title: Config Updates Without Redeployment for Spring and Kubernetes
 author: Archie Cowan
 subtitle: Spring PropertySources and Kubernetes Configmaps
+excerpt: Update application configuration without restarting pods using Spring PropertySources and Kubernetes ConfigMaps. Learn how to build apps that reload configuration on-demand, enabling live updates in production environments.
 date: 2021-12-18
 tags: ["deployments", "Kubernetes"]
 ---
 
 Here's what you'll accomplish by the end of this article:
 
-* Create a small Spring Boot application that loads a property file from a configurable location overriding configuration that is packaged with the application.
-* Package the application in a docker image and see how to override the config file via docker commands.
-* Deploy the application to kubernetes.
-* Use a Kubernetes Configmap to update your configuration without redeployment of your application.
-* Learn about when using these methods together is recommended.
-
+-   Create a small Spring Boot application that loads a property file from a configurable location overriding configuration that is packaged with the application.
+-   Package the application in a docker image and see how to override the config file via docker commands.
+-   Deploy the application to kubernetes.
+-   Use a Kubernetes Configmap to update your configuration without redeployment of your application.
+-   Learn about when using these methods together is recommended.
 
 ## Starting your Spring Boot application example
-
 
 A fast way to get a spring boot application started is the Spring Initializr. All you need for this example is Spring Boot and Spring WebFlux.
 
@@ -59,10 +58,10 @@ class Greeting {
 
 A quick breakdown fo what we have here:
 
-* `@RestController` tells spring this class provides endpoints to make available on the web server
-* `@GetMapping(path = "/hello")` creates an endpoint on the path `/hello`
-* `@Value("${message}") String message` injects a property called message whenever this function is called
-* The `Greeting` class is just a struct for us to return in our message
+-   `@RestController` tells spring this class provides endpoints to make available on the web server
+-   `@GetMapping(path = "/hello")` creates an endpoint on the path `/hello`
+-   `@Value("${message}") String message` injects a property called message whenever this function is called
+-   The `Greeting` class is just a struct for us to return in our message
 
 Next, let's define the `message` property in `src/main/resources/application.properties`.
 
@@ -70,11 +69,10 @@ Next, let's define the `message` property in `src/main/resources/application.pro
 message=This is the default message.
 ```
 
-
 At this point, when you run the application and make a GET request to /hello, you'll see receive this response:
 
 ```json
-{"greeting":"This is the default message."}
+{ "greeting": "This is the default message." }
 ```
 
 The `application.proeprties` file cannot be updated at runtime. But, you can provide spring configuration instructions to load a configuration from another source. For this, we need an additional dependency and a configuration class.
@@ -89,7 +87,7 @@ First, the dependency is `commons-configuration`. Add this to your dependencies 
 </dependency>
 ```
 
-This package provides a component that loads a property file from disk and then reloads it when changes are detected. You need to wrap `PropertiesConfiguration` from `commons-configuration` into a class that provides the `PropertySource` interface so that Spring can bring this configuration into the application context and inject the values.  
+This package provides a component that loads a property file from disk and then reloads it when changes are detected. You need to wrap `PropertiesConfiguration` from `commons-configuration` into a class that provides the `PropertySource` interface so that Spring can bring this configuration into the application context and inject the values.
 
 ```java
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -170,14 +168,13 @@ public class DemoConfiguration {
 
 Here's what's happening in `DemoConfiguration` [^2]:
 
-* `@ConditionalOnProperty(name = "spring.config.location", matchIfMissing = false)` gates these methods from running unless a property `spring.config.location` is available. You will pass this on the command line with a system property in a few steps.
-* the `propertiesConfiguration` method creates a `commons-configuration` `PropertiesConfiguration` object that refreshes after 1 second if there are  nay changes.
-* the `reloadablePropertySource` method takes the `PropertiesConfiguration` you created and makes it the first place Spring will look for properties with `sources.addFirst(ret)`.
+-   `@ConditionalOnProperty(name = "spring.config.location", matchIfMissing = false)` gates these methods from running unless a property `spring.config.location` is available. You will pass this on the command line with a system property in a few steps.
+-   the `propertiesConfiguration` method creates a `commons-configuration` `PropertiesConfiguration` object that refreshes after 1 second if there are nay changes.
+-   the `reloadablePropertySource` method takes the `PropertiesConfiguration` you created and makes it the first place Spring will look for properties with `sources.addFirst(ret)`.
 
 [^2]: The configuration classes demonstrated here were adapted from a [Baeldung article](https://www.baeldung.com/spring-reloading-properties) with a few critical changes.
 
 Try rerunning your application and verify that it behaves the same as before. Nothing should have changed yet with the way your endpoint works.
-
 
 Now, add a new folder in the root of your project called `k8s` and create a new file `config.properties` with this content:
 
@@ -195,8 +192,6 @@ Including the following system property argument in your VM options will define 
 
 When you recompile and rerun your application, the `/hello` endpoint will now return the message in `k8s/config.properties` instead of `application.properties`! Try updating `config.properties` and observe how the message variable changes.
 
-
-
 ## Running the DemoApplication in Docker
 
 As a sanity check before you jump into Kubernetes, verify the application behavior using Docker only. This can save you some time if you have issues.
@@ -208,7 +203,6 @@ mvn spring-boot:build-image -Dspring-boot.build-image.imageName=demoapplication:
 ```
 
 This gets you a pretty robust image for your application without having to create a Dockerfile.
-
 
 Now you can run your application with docker like this:
 
@@ -224,7 +218,6 @@ curl http://localhost:8081/hello ; echo
 ```
 
 You just need to specify the VM arguments using an environment variable as well as mount a volume including your `config.properties`.
-
 
 ```bash
 docker run -it --rm -p 8081:8080 \
@@ -243,6 +236,7 @@ curl http://localhost:8081/hello ; echo
 Now you can update `k8s/config.properties` to verify that the properties update live.
 
 config.properties
+
 ```bash
 message=Hello my name is Enzo
 ```
@@ -254,13 +248,13 @@ curl http://localhost:8081/hello ; echo
 
 You're doing great! The application works in docker and the properties update without restarting the application.
 
-
 # Now with Kubernetes
 
 Now for some fun with kubernetes!
 
-***
-***Kubernetes setup***
+---
+
+**_Kubernetes setup_**
 
 These steps should work with any recent version of Kubernetes. Minikube is a great resource if you need a local environment. In order to make your docker images available to Kubernetes, you will need access to a container registry. With Minikube, you can skip over the registry effort by attaching your docker client to the docker service in Minikube
 
@@ -272,7 +266,7 @@ Then use docker as you normally would. [More info here](https://minikube.sigs.k8
 
 Otherwise, you can use `minikube image load` to copy the image from your docker environment to Minikube. [More info here](https://minikube.sigs.k8s.io/docs/commands/image/).
 
-***
+---
 
 As a first step, create a namespace for the work you will do. The big benefit of this is that you will be able to start from a clean slate very easily by deleting the namespace.
 
@@ -325,7 +319,6 @@ kubectl get configmap hello-config -o yaml
 
 You can see, a config.properties contains the data from your properties file. You can edit the manifest with `kubectl edit configmap hello-config` or use `kubectl apply -f manifest.yml` to make changes.
 
-
 Next to get our application running in kubernetes, make sure your image is either in an accessible container registry or available locally.
 
 Now, create a deployment with your `demoapplication:0.1` image.
@@ -349,11 +342,10 @@ minikube tunnel
 Now, when you access [http://localhost:8080/hello](http://localhost:8080/hello) you should see the default response from your application.
 
 ```json
-{"greeting":"This is the default message."}
+{ "greeting": "This is the default message." }
 ```
 
 You don't yet see the value from the configmap because you haven't wired up the config map with your deploy yet. That's next!
-
 
 To make config.properties available to your helloapp pods, you must add a volume and a volumeMount to the deployment spec. Below are the parts to add to your manifest using `kubectl edit deployment helloapp`.
 
@@ -379,11 +371,11 @@ What remains is to configure the application to look at `/hello/config.propertie
 
 ```yaml
 spec:
-  containers:
-    - image: demoapplication:0.1
-      env:
-        - name: JAVA_TOOL_OPTIONS
-          value: "-Dspring.config.location=/hello/config.properties"
+    containers:
+        - image: demoapplication:0.1
+          env:
+              - name: JAVA_TOOL_OPTIONS
+                value: "-Dspring.config.location=/hello/config.properties"
 ```
 
 After you edit this time, Kubernetes cycles in a new version of your pod. Now, the greeting on your endpoint reflects the values in `/hello/config.properties`! Congrats!
@@ -391,7 +383,7 @@ After you edit this time, Kubernetes cycles in a new version of your pod. Now, t
 Now, when you access [http://localhost:8080/hello](http://localhost:8080/hello) you should see the default response from your application.
 
 ```json
-{"greeting":"Hello my name is Jake"}
+{ "greeting": "Hello my name is Jake" }
 ```
 
 Now, when you edit the configmap, the file in your pods will reflect the changes after 1 minute by default [^1]. Spring will detect the changes and reload the properties file.
@@ -402,14 +394,14 @@ There are infinite options for application configuration and this is just one mo
 
 Here are some example criteria to consider:
 
-* You're already running Kubernetes.
-* There is a business benefit to updating configuration without restarting your application.
-* The time to deploy a configuration update is much faster than simply deploying a new container image.
-* You prefer not to run a dedicated configuation server in addition to your application [^3].
-* Your application configuration is contextual to the Kubernetes namespace in which it runs and you operate many namespaces with different configurations deployed.
-* Multiple applications running in the same namespace share configuration values.
-* Configuration is committed to your source control system.
-* Configuration is delivered to Kubernetes from source control via deployment automation.
+-   You're already running Kubernetes.
+-   There is a business benefit to updating configuration without restarting your application.
+-   The time to deploy a configuration update is much faster than simply deploying a new container image.
+-   You prefer not to run a dedicated configuation server in addition to your application [^3].
+-   Your application configuration is contextual to the Kubernetes namespace in which it runs and you operate many namespaces with different configurations deployed.
+-   Multiple applications running in the same namespace share configuration values.
+-   Configuration is committed to your source control system.
+-   Configuration is delivered to Kubernetes from source control via deployment automation.
 
 You may have additional criteria for your environment. It's good to think it through.
 
@@ -419,6 +411,5 @@ You may have additional criteria for your environment. It's good to think it thr
 
 Hope this helps you on your journey with Spring Boot and Kuberenetes. Please reach out if you'd like to hear more about these topics.
 
-
-[^1]: `--sync-frequency` is a [kubelet config option](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#mounted-configmaps-are-updated-automatically
-) - it defaults to 1m.
+[^1]:
+    `--sync-frequency` is a [kubelet config option](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#mounted-configmaps-are-updated-automatically) - it defaults to 1m.

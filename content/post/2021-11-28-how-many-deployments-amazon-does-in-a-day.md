@@ -2,6 +2,7 @@
 title: You Can Match How Many Deployments Amazon Does in a Day
 author: Archie Cowan
 subtitle: (Per Engineer)
+excerpt: Amazon does 136,000 deployments per day with 50,000 engineers—that's just 2-3 changes per engineer per week. Learn why your team can achieve similar velocity by making small iterative changes and automating 5-10 deployment steps per change.
 date: 2021-11-28
 tags: ["practices", "deployments"]
 ---
@@ -30,9 +31,11 @@ How long will it take different sized teams with different deployment velocities
 | 148              | 337.8            | 96.5    | 33.8    | **12.5** | **4.6**  | **1.7**  | **0.6**  | **0.2**  |
 
 Across the horizontal access we have hypothetical team size. Down the vertical access we have number of changes per engineer per year. Both axis increase exponentially. The cells use the following formula to estimate the number of years it would take to reach one million deployments:
+
 $$
 \frac{10^6}{commits * engineers * deployments}
 $$
+
 That is, one million over the product of the number of commits, engineers, and deployments where the commits and engineers follow the axis above and number of deployments is simply 10 per commit. In a spreadsheet, basically this formula
 
 ```
@@ -41,47 +44,35 @@ That is, one million over the product of the number of commits, engineers, and d
 
 I belabor this point to show that for many organizations, achieving this change velocity is possible. 1M deployments is actually possible in about 10 years for organizations with more than 20 engineers making between 50 and 150 changes per engineer per year.
 
-
 ## Why does high deployment velocity matter?
-
 
 Teams that have higher deployment frequency learn more quickly and their changes are safer. Every change is a learning opportunity to see how it affects your environment. Changes are safer when they are smaller.
 
-
 ![image-20211114130001416](/img/2021-11-14-reach1m/image-20211114130001416.png)
-
 
 Teams that learn more are able to make more progress more quickly. This is basically the essence of what I take away from the State of Devops Reports over the last few years.
 
-
-
-- [State of DevOps 2014](https://services.google.com/fh/files/misc/state-of-devops-2014.pdf)
-- [State of DevOps 2015](https://services.google.com/fh/files/misc/state-of-devops-2015.pdf)
-- [State of DevOps 2016](https://services.google.com/fh/files/misc/state-of-devops-2016.pdf)
-- [State of DevOps 2017](https://services.google.com/fh/files/misc/state-of-devops-2017.pdf)
-- [Accelerate State of DevOps 2018](https://services.google.com/fh/files/misc/state-of-devops-2018.pdf)
-- [Accelerate State of DevOps 2019](https://services.google.com/fh/files/misc/state-of-devops-2019.pdf)
-- [Accelerate State of DevOps 2021](https://services.google.com/fh/files/misc/state-of-devops-2021.pdf)
-
-
+-   [State of DevOps 2014](https://services.google.com/fh/files/misc/state-of-devops-2014.pdf)
+-   [State of DevOps 2015](https://services.google.com/fh/files/misc/state-of-devops-2015.pdf)
+-   [State of DevOps 2016](https://services.google.com/fh/files/misc/state-of-devops-2016.pdf)
+-   [State of DevOps 2017](https://services.google.com/fh/files/misc/state-of-devops-2017.pdf)
+-   [Accelerate State of DevOps 2018](https://services.google.com/fh/files/misc/state-of-devops-2018.pdf)
+-   [Accelerate State of DevOps 2019](https://services.google.com/fh/files/misc/state-of-devops-2019.pdf)
+-   [Accelerate State of DevOps 2021](https://services.google.com/fh/files/misc/state-of-devops-2021.pdf)
 
 Also, a [whitepaper specifically on the ROI of DevOps transformation](https://services.google.com/fh/files/misc/whitepaper_roi_of_devops_transformation_2020_google_cloud.pdf) where change velocity is addressed with respect to return on investment.
 
 ![image-20211114133040063](/img/2021-11-14-reach1m/image-20211114133040063.png)
 
-
-
 Elite technology performance, as characterized by
 
-* high change velocity
-* low change failure rate
-* faster recovery time from failures (mttr)
-* faster lead time for changes
+-   high change velocity
+-   low change failure rate
+-   faster recovery time from failures (mttr)
+-   faster lead time for changes
 
 results in a better return on investment for the business.
 
-
 Can you also achieve these results at your organization? Yes, we believe you can. We have influenced this type of change in real organizations. If you have a story or a challenge to share with us, we'd love to hear from you. Please reach out.
-
 
 [^1]: You can find online that Amazon had ~36K engineers in 2019. 50K is in the same order of magnitude.

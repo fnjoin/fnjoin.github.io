@@ -2,6 +2,7 @@
 author: Archie Cowan
 title: "Polyglot monorepo build and maintenance automation"
 subtitle: Creating and using blueprints with Projen, PDK, and Nx.
+excerpt: Stop copying code between folders and manually managing package builds. Learn how Projen, PDK, and Nx create reusable code packages with automated dependency tracking, letting you import instead of copy-paste while keeping build artifacts current with zero manual effort.
 date: 2024-03-03
 coverImage:
     imageSrc: /img/pdk-projen-nx/head-img.png

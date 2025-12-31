@@ -1,6 +1,7 @@
 ---
 author: Archie Cowan
 title: 10 reasons I don't write
+excerpt: Perfectionism disguised as "needing the right tools" kills writing before it starts. Learn why waiting for margin notes, automated numbering, and perfect markdown features is just procrastination in disguise, and I used coding to overcome it.
 date: 2024-05-12
 coverImage:
     imageSrc: /img/the-reasons-i-dont-write/cover.webp

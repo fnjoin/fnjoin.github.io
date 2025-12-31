@@ -1,29 +1,30 @@
 ---
 title: Kubernetes with Java - Running in the Cluster
 subtitle: Using Kubernetes API through a Java app from inside the Kubernetes cluster with RBAC
+excerpt: Deploy Spring Boot apps that access Kubernetes APIs from inside the cluster using proper RBAC configuration. Learn how to package apps into OCI images, configure ServiceAccounts with minimal permissions, and deploy with Kubernetes resources.
 author: Salman Malik
 date: 2021-09-11
 tags: ["java", "kubernetes", "spring-boot", "rbac"]
 ---
 
-### What are we going to do?  
+### What are we going to do?
 
-This post builds on top of [Kubernetes with Java - Introduction](../2021-08-27-show-deployments) and [Kubernetes with Java - Asynchronous APIs](../2021-09-08-show-deployments-async) posts which showed us how to interact with the Kubernetes API to list *deployment* resources and provide an API of our own to list teams and apps belonging to those teams running in the cluster. In this post, we will 
+This post builds on top of [Kubernetes with Java - Introduction](../2021-08-27-show-deployments) and [Kubernetes with Java - Asynchronous APIs](../2021-09-08-show-deployments-async) posts which showed us how to interact with the Kubernetes API to list _deployment_ resources and provide an API of our own to list teams and apps belonging to those teams running in the cluster. In this post, we will
 
-- Configure a spring-boot app to be able to access the Kubernetes API when running inside a Kubernetes cluster
-- Learn how to package up a spring-boot app into an OCI image (aka Docker image)
-- Configure RBAC with *Role*, *RoleBinding*, and *ServiceAccount* so our spring-boot app has the ability to run with only the Kubernetes APIs that we think it should have access to and nothing more
-- Create *Deployment* and *Service* resources to deploy our spring-boot app and expose its API within the cluster
+-   Configure a spring-boot app to be able to access the Kubernetes API when running inside a Kubernetes cluster
+-   Learn how to package up a spring-boot app into an OCI image (aka Docker image)
+-   Configure RBAC with _Role_, _RoleBinding_, and _ServiceAccount_ so our spring-boot app has the ability to run with only the Kubernetes APIs that we think it should have access to and nothing more
+-   Create _Deployment_ and _Service_ resources to deploy our spring-boot app and expose its API within the cluster
 
 #### Prerequisites
 
-- Access to source code for the project - https://github.com/fnjoin/blog-team-apps
-- Access to a running Kubernetes cluster - we will assume *minikube*
-- A cluster admin role so we can use RBAC based *role* and *service-account* within Kubernetes. If you started a minikube instance, you already have this role 
+-   Access to source code for the project - https://github.com/fnjoin/blog-team-apps
+-   Access to a running Kubernetes cluster - we will assume _minikube_
+-   A cluster admin role so we can use RBAC based _role_ and _service-account_ within Kubernetes. If you started a minikube instance, you already have this role
 
 ### Connecting to Kubernetes API inside Kubernetes cluster
 
-Earlier, we created an `ApiClientConfig` class in [Kubernetes with Java - Introduction](../2021-08-27-show-deployments) and added the mechanism to create an *api-client* which connects to the Kubernetes API server when the app is running **outside** of the cluster. We will now introduce a new bean which creates an *api-client* which knows how to communicate with the Kubernetes API server while running **inside** the cluster. Since other parts of the application expect only one *api-client* bean in the whole system, we have to configure that *api-client* appropriately depending on where the app is running. We will use the spring-boot profiles mechanism to differentiate between which environment we are running in when creating this bean.
+Earlier, we created an `ApiClientConfig` class in [Kubernetes with Java - Introduction](../2021-08-27-show-deployments) and added the mechanism to create an _api-client_ which connects to the Kubernetes API server when the app is running **outside** of the cluster. We will now introduce a new bean which creates an _api-client_ which knows how to communicate with the Kubernetes API server while running **inside** the cluster. Since other parts of the application expect only one _api-client_ bean in the whole system, we have to configure that _api-client_ appropriately depending on where the app is running. We will use the spring-boot profiles mechanism to differentiate between which environment we are running in when creating this bean.
 
 We will introduce a `cloud` profile. When `cloud` profile is active, we will assume that the app is running inside the Kubernetes cluster, otherwise it will assume to be running outside. The code will look like the following:
 
@@ -67,13 +68,13 @@ These are all the changes needed in our spring-boot application to be able to co
 
 ### Packaging spring-boot app in an OCI image
 
-Now that our code is ready to be run inside Kubernetes, we need to package it as an OCI image. We also need to settle on the image name and which image registry the image will be hosted in. For this to happen, we need access to a running docker daemon, be able to to connect to it, and have acsess to an image regitry where our OCI image will be stored. 
+Now that our code is ready to be run inside Kubernetes, we need to package it as an OCI image. We also need to settle on the image name and which image registry the image will be hosted in. For this to happen, we need access to a running docker daemon, be able to to connect to it, and have acsess to an image regitry where our OCI image will be stored.
 
 > Linux has the capability to run a docker deamon natively. Also, docker-desktop is a good choice for Windows or Mac. Another interesting choice is exposing the docker daemon running inside minikube to the host machine - we will go with that last option.
 
-Since we are using spring-boot version 2.5.4, it is very easy to package up our application as an OCI image. The capability to create OCI images is actually a spring-boot maven/gradle plugin capablity. It has been around since spring-boot version 2.3.0. For earlier versions of spring-boot, the [Jib plugins for maven/gradle](https://github.com/GoogleContainerTools/jib) would have been a good option. In this day and age, rolling your own image with a *Dockerfile* is not worth it for spring-boot applications because of these other options.
+Since we are using spring-boot version 2.5.4, it is very easy to package up our application as an OCI image. The capability to create OCI images is actually a spring-boot maven/gradle plugin capablity. It has been around since spring-boot version 2.3.0. For earlier versions of spring-boot, the [Jib plugins for maven/gradle](https://github.com/GoogleContainerTools/jib) would have been a good option. In this day and age, rolling your own image with a _Dockerfile_ is not worth it for spring-boot applications because of these other options.
 
-We can kill two birds with one stone (only figuratively, we love birds!) by exposing the docker daemon running inside our *minikube* instance. This docker daemon will not only build our app image but will act as the image registry when it is time for Kubernetes to download/run the image - there will be nothing to download as the image will already be there. On Linux and Mac, the following will do the trick:
+We can kill two birds with one stone (only figuratively, we love birds!) by exposing the docker daemon running inside our _minikube_ instance. This docker daemon will not only build our app image but will act as the image registry when it is time for Kubernetes to download/run the image - there will be nothing to download as the image will already be there. On Linux and Mac, the following will do the trick:
 
 ```shell
 eval $(minikube -p minikube docker-env)
@@ -214,9 +215,9 @@ There is a lot that went on with that image build - all the heavy lifting was do
 
 ### Setup RBAC in Kubernetes
 
-To keep things simple, we will run our app in the same namespace (`dev`) that our sample apps from [Kubernetes with Java - Introduction](../2021-08-27-show-deployments) post were running in. The details of the Kubernetes RBAC mechanism is described very well in the [official Kubernetes documentation](https://kubernetes.io/docs/reference/access-authn-authz/rbac/) but we will just go over the  highlights here.
+To keep things simple, we will run our app in the same namespace (`dev`) that our sample apps from [Kubernetes with Java - Introduction](../2021-08-27-show-deployments) post were running in. The details of the Kubernetes RBAC mechanism is described very well in the [official Kubernetes documentation](https://kubernetes.io/docs/reference/access-authn-authz/rbac/) but we will just go over the highlights here.
 
-We need to create a *Role* and a *ServiceAccount* first. Then create a *RoleBinding* to link the *Role* and *ServiceAccount* together. A *ServiceAccount* can be associated with many *Role* objects, the reverse is true as well. All three of these resources are configured using YAML definitions with `kubectl`. They are included in the source code in the `k8s` directory as `rbac.yaml`. Apply them to the cluster using the following command (assuming that we are running from the root of the project):
+We need to create a _Role_ and a _ServiceAccount_ first. Then create a _RoleBinding_ to link the _Role_ and _ServiceAccount_ together. A _ServiceAccount_ can be associated with many _Role_ objects, the reverse is true as well. All three of these resources are configured using YAML definitions with `kubectl`. They are included in the source code in the `k8s` directory as `rbac.yaml`. Apply them to the cluster using the following command (assuming that we are running from the root of the project):
 
 ```shell
 kubectl apply -f k8s/rbac.yaml
@@ -228,44 +229,44 @@ The `rbac.yaml` contents look like:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: team-apps
-  namespace: dev
+    name: team-apps
+    namespace: dev
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: team-apps-role
-  namespace: dev
+    name: team-apps-role
+    namespace: dev
 rules:
-  - apiGroups:
-      - apps
-    resources:
-      - deployments
-    verbs:
-      - watch
-      - get
-      - list
+    - apiGroups:
+          - apps
+      resources:
+          - deployments
+      verbs:
+          - watch
+          - get
+          - list
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: team-apps-role-binding
-  namespace: dev
-subjects:
-  - kind: ServiceAccount
-    name: team-apps
+    name: team-apps-role-binding
     namespace: dev
+subjects:
+    - kind: ServiceAccount
+      name: team-apps
+      namespace: dev
 roleRef:
-  kind: Role
-  name: team-apps-role
-  apiGroup: rbac.authorization.k8s.io
+    kind: Role
+    name: team-apps-role
+    apiGroup: rbac.authorization.k8s.io
 ```
 
-The *service-account* definition is just a name at this point. The *role* is where the Kubernetes API permissions are defined. In this case, we are only allowing watch, get, and list operations for the *deployment* resources. The *deployment* resources are part of the `apps` API group - this is the same reason when we dealt with the `V1Deployment` objects in Java, we got hold of them using the `AppsV1Api.listNamespacedDeployment*()` method. Finally, the *role-binding* binds the *role* and *service-account* together.
+The _service-account_ definition is just a name at this point. The _role_ is where the Kubernetes API permissions are defined. In this case, we are only allowing watch, get, and list operations for the _deployment_ resources. The _deployment_ resources are part of the `apps` API group - this is the same reason when we dealt with the `V1Deployment` objects in Java, we got hold of them using the `AppsV1Api.listNamespacedDeployment*()` method. Finally, the _role-binding_ binds the _role_ and _service-account_ together.
 
 ### Deploy the app in Kubernetes
 
-The source code includes the `app.yaml` file in `k8s` directory. This file includes the *Deployment* and *Service* resource definitions that we need to apply using `kubectl`. The command will look like the following:
+The source code includes the `app.yaml` file in `k8s` directory. This file includes the _Deployment_ and _Service_ resource definitions that we need to apply using `kubectl`. The command will look like the following:
 
 ```shell
 kubectl apply -f k8s/app.yaml
@@ -277,57 +278,57 @@ The contents of `app.yaml` look like:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: team-apps
-  namespace: dev
+    name: team-apps
+    namespace: dev
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: team-apps
-  template:
-    metadata:
-      labels:
-        app: team-apps
-    spec:
-      serviceAccountName: team-apps
-      restartPolicy: Always
-      containers:
-        - name: app
-          image: example/team-apps:1.0
-          env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: cloud,async
-          ports:
-            - name: web
-              containerPort: 8080
+    replicas: 1
+    selector:
+        matchLabels:
+            app: team-apps
+    template:
+        metadata:
+            labels:
+                app: team-apps
+        spec:
+            serviceAccountName: team-apps
+            restartPolicy: Always
+            containers:
+                - name: app
+                  image: example/team-apps:1.0
+                  env:
+                      - name: SPRING_PROFILES_ACTIVE
+                        value: cloud,async
+                  ports:
+                      - name: web
+                        containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: team-apps-service
-  namespace: dev
+    name: team-apps-service
+    namespace: dev
 spec:
-  selector:
-    app: team-apps
-  ports:
-    - port: 8181
-      targetPort: web
-
+    selector:
+        app: team-apps
+    ports:
+        - port: 8181
+          targetPort: web
 ```
 
-Notice the usage of `serviceAccountName` in the *deployment* manifest. Without speciying that, our app will not have permissions to use the Kubernetes API when running inside the cluster. Also, notice that we supplied the `SPRING_PROFILES_ACTIVE` environment variable be set to `cloud,async` so those Spring profiles are active when the app starts up.
+Notice the usage of `serviceAccountName` in the _deployment_ manifest. Without speciying that, our app will not have permissions to use the Kubernetes API when running inside the cluster. Also, notice that we supplied the `SPRING_PROFILES_ACTIVE` environment variable be set to `cloud,async` so those Spring profiles are active when the app starts up.
 
-#### Accessing the *team-apps* API
+#### Accessing the _team-apps_ API
 
 If you want to access the API inside the cluster and you are trying to do it from a pod running in the `dev` namesapce then the URL would simply be - `http://team-apps-service:8181`
 
 If you want to access the API inside the cluster but you are trying to do it from a pod running in a namespace other than `dev` then the URL would be - `http://team-apps-service.dev.svc.cluster.local:8181`
 
-If you want to access the API from outside the cluster, there are a lot more options and complexities to be considered. But the easiest way to verify that the service is properly working is simply setting up a *port-forward* - which can be done with the following command:
+If you want to access the API from outside the cluster, there are a lot more options and complexities to be considered. But the easiest way to verify that the service is properly working is simply setting up a _port-forward_ - which can be done with the following command:
 
 ```shell
 kubectl port-forward service/team-apps-service -n dev 8282:8181
 ```
-This will make port `8282` on localhost forward to port `8181` on the `team-apps-service` service, which will then forward the request to port `8080` on the app container.  
+
+This will make port `8282` on localhost forward to port `8181` on the `team-apps-service` service, which will then forward the request to port `8080` on the app container.
 
 > The decision to use different ports (8080, 8181, 8282) is just for demonstration purposes. It is to show the levels of port-forwarding or proxying that is involved in this way of accessing our app

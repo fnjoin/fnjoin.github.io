@@ -2,6 +2,7 @@
 title: "AI Coding Tool Tips: Use Git Well"
 author: Archie Cowan
 subtitle: AI will make mistakes—git is how you recover from them instantly
+excerpt: Learn why git becomes your lifeline when AI writes most of your code. Discover the team-scale practices that keep you aligned with code you didn't write yourself, and how branching gives you multiple states to experiment with when AI gets creative.
 date: 2025-12-20
 coverImage:
     imageSrc: /img/use-git-well/head-img.png

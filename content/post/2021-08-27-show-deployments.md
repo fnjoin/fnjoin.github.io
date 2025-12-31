@@ -2,23 +2,26 @@
 title: Kubernetes with Java - Introduction
 author: Salman Malik
 subtitle: Getting started with the Kubernetes API client libraries for Java
+excerpt: >
+    Build Spring Boot applications that interact with Kubernetes APIs to extract deployment metadata and create custom views. 
+    Learn how to initialize the K8s API client and transform cluster data into team and application listings.
 date: 2021-08-27
 tags: ["java", "kubernetes", "spring-boot"]
 ---
 
-### What are we going to do?  
+### What are we going to do?
 
- - Learn how to initialize the k8s api client in a java spring-boot application
- - Extract metadata from deployments in a namespace and transform that metadata into new views  
- - Prepare you for more sophisticated problem solving using the k8s API in future articles
+-   Learn how to initialize the k8s api client in a java spring-boot application
+-   Extract metadata from deployments in a namespace and transform that metadata into new views
+-   Prepare you for more sophisticated problem solving using the k8s API in future articles
 
 ### Motivation
 
-- You have a few dozen different applications (as Kubernetes deployment resources) running in your cluster
-- All of those applications use labels to designate the name of the team that manages that application, and the application name
-- You want to provide APIs that:
-  - Lists all teams that have applications running in the cluster
-  - Lists all apps that belong to a team
+-   You have a few dozen different applications (as Kubernetes deployment resources) running in your cluster
+-   All of those applications use labels to designate the name of the team that manages that application, and the application name
+-   You want to provide APIs that:
+    -   Lists all teams that have applications running in the cluster
+    -   Lists all apps that belong to a team
 
 ### Scenario
 
@@ -28,16 +31,16 @@ Assumption: you have minikube locally and you don't already have a namespace cal
 kubectl create namespace dev
 ```
 
-Now, let's create some deployments to model lots of different teams with lots of apps. This creates 5 teams with 9 applications each (petnames.txt contains 50 petnames). 
+Now, let's create some deployments to model lots of different teams with lots of apps. This creates 5 teams with 9 applications each (petnames.txt contains 50 petnames).
 
 ```shell
-curl -Lo petnames.txt https://fnjoin.com/data/2021-08-21-show-pods-petnames.txt 
+curl -Lo petnames.txt https://fnjoin.com/data/2021-08-21-show-pods-petnames.txt
 cat petnames.txt | paste - - - - - - - - - - | \
-while read line ; do 
+while read line ; do
   set -- $line
   team=team-$1
   shift
-  for app ; do 
+  for app ; do
     app=app-$app
     kubectl create deployment $app --image=k8s.gcr.io/echoserver:1.4 -n dev
     kubectl label deployment $app team=$team -n dev
@@ -62,17 +65,17 @@ app-bullheaded-tran          0/1     1            0           19s
 ....
 ```
 
-------
+---
 
 If you wanted to get more information about the deployments, you could get the output of the above command in JSON format and transform it with something like [jq](https://stedolan.github.io/jq/) to get the relevant information out like so:
 
 ```shell
 kubectl get deployments -n dev -o json | jq '[ .items[] | { name: .metadata.labels.app, team: .metadata.labels.team, readyInstances: .status.readyReplicas }]'
-``````
+```
 
 This command will transform the information from `kubectl` to show a list of apps along with their team names, and how many instances of each are ready. This capability to access Kubernetes information from CLI is very powerful on its own but we want to provide this information through an API since most people in our fictional organization won't have access to run the `kubectl` commands against the cluster for security reasons.
 
->This is a contrived example, as almost all Kubernetes platforms make some kind of dashboard available that let you view resources in the cluster along with their labels. This example mainly shows you how one would go about interacting with the Kubernetes API using Java.
+> This is a contrived example, as almost all Kubernetes platforms make some kind of dashboard available that let you view resources in the cluster along with their labels. This example mainly shows you how one would go about interacting with the Kubernetes API using Java.
 
 ### Introducing the Kubernetes Java Client libraries
 
@@ -141,16 +144,16 @@ public class ApiClientConfig {
 
 ### Use the client to lookup the deployments
 
-Now that we have the *api-client*, we are ready to lookup the *deployments* metadata. Here we will make some assumptions:
+Now that we have the _api-client_, we are ready to lookup the _deployments_ metadata. Here we will make some assumptions:
 
-- We are only interested in deployments running in the `dev` namespace
-- We are only interested in deployments containing `app` and `team` labels
-- We are interested in the following attributes of the deployments:
-  - App name
-  - Team that app belongs to
-  - How many instances/replicas of that app are running/ready
+-   We are only interested in deployments running in the `dev` namespace
+-   We are only interested in deployments containing `app` and `team` labels
+-   We are interested in the following attributes of the deployments:
+    -   App name
+    -   Team that app belongs to
+    -   How many instances/replicas of that app are running/ready
 
-We will first declare a Java bean that will hold the information about a running application, lets call it `TeamApp`. We are using [project Lombok](https://projectlombok.org/) to cut down on boiler-plate code here. We will also be using the [*builder* pattern](https://blogs.oracle.com/javamagazine/java-builder-pattern-bloch) for this bean:
+We will first declare a Java bean that will hold the information about a running application, lets call it `TeamApp`. We are using [project Lombok](https://projectlombok.org/) to cut down on boiler-plate code here. We will also be using the [_builder_ pattern](https://blogs.oracle.com/javamagazine/java-builder-pattern-bloch) for this bean:
 
 ```java
 import lombok.Builder;
@@ -165,7 +168,7 @@ public class TeamApp {
 }
 ```
 
-We will declare an interface that is the contract for our API. One method will provide the names for teams that have applications running in the cluster. The other method will return list of *team-app* objects for a given team. the interface will look like:
+We will declare an interface that is the contract for our API. One method will provide the names for teams that have applications running in the cluster. The other method will return list of _team-app_ objects for a given team. the interface will look like:
 
 ```java
 import java.util.List;
@@ -200,7 +203,7 @@ public class SynchronousTeamAppsService implements TeamAppsService {
     public SynchronousTeamAppsService(
             ApiClient client,
             @Value("${namespace}") String namespace) {
-        
+
         log.info("Creating synchronous team-app service, Namespace={}", namespace);
         this.appsV1Api = new AppsV1Api(client);
         this.namespace = namespace;
@@ -210,9 +213,9 @@ public class SynchronousTeamAppsService implements TeamAppsService {
 }
 ```
 
-In the constructor above, *api-client* bean is injected by Spring, which is used to create an `AppsV1Api` object - this is the object we will be dealing with to access *app* level Kubernetes objects like  `Deployment` and `StatefulSet` among others. There are other *API* objects in the `io.kubernetes.client.openapi.apis` package that deal with other kinds of built-in Kubernetes objects. For example, we can use `CoreV1Api` to deal with `Pod`, `ConfigMap`, `Secret`, and `Service`.
+In the constructor above, _api-client_ bean is injected by Spring, which is used to create an `AppsV1Api` object - this is the object we will be dealing with to access _app_ level Kubernetes objects like `Deployment` and `StatefulSet` among others. There are other _API_ objects in the `io.kubernetes.client.openapi.apis` package that deal with other kinds of built-in Kubernetes objects. For example, we can use `CoreV1Api` to deal with `Pod`, `ConfigMap`, `Secret`, and `Service`.
 
-Next is the `namespace` variable that is injected into this bean by Spring. The `application.properties` file in the project sets this value as `dev` but it can be overridden at runtime through various Spring Framework means. 
+Next is the `namespace` variable that is injected into this bean by Spring. The `application.properties` file in the project sets this value as `dev` but it can be overridden at runtime through various Spring Framework means.
 
 ```java
 public Set<String> listTeams() {
@@ -257,11 +260,11 @@ public V1DeploymentList listNamespacedDeployment(
 
 This Java API mimics the Kubernetes API very closely. All these arguments are meant for more advanced usages, but for our purposes, supplying `namespace` and `labelSelector` parameters are sufficient. The `labelselector` parameter is a string that can be formatted according to the [official documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors). We will supply the label name of `team` as the value for that parameter. This ensures that returned pods will have that label present no matter what the label values are.
 
-This method returns a `V1DeploymentList` which has the `getItems()` method which can give us a list of `V1Deployment` objects. Once we have that list, we can use the Java stream mechanism to transform each object to a team name, adding them to a Java *set* which will take care of duplicates. Like the `V1Deployment` object, most Kubernetes built-in resources have a corresponding class in the `io.kubernetes.client.openapi.models` package.
+This method returns a `V1DeploymentList` which has the `getItems()` method which can give us a list of `V1Deployment` objects. Once we have that list, we can use the Java stream mechanism to transform each object to a team name, adding them to a Java _set_ which will take care of duplicates. Like the `V1Deployment` object, most Kubernetes built-in resources have a corresponding class in the `io.kubernetes.client.openapi.models` package.
 
-> There is a pattern at play here. In the *api* object you'll find methods of the form `listNamespacedSomething()` that pretty much takes this exact set of arguments. It returns a `V1SomethingList` object which has a `getItems()` method that returns a list of `V1Something` objects.
+> There is a pattern at play here. In the _api_ object you'll find methods of the form `listNamespacedSomething()` that pretty much takes this exact set of arguments. It returns a `V1SomethingList` object which has a `getItems()` method that returns a list of `V1Something` objects.
 
-Finally, we need to implement the `TeamAppsService.listTeamApps()` method. It will use the same *api* call but instead of mapping `V1Deployment` to a team name, it will map them to `TeamApp` objects. The relevant code will look like:
+Finally, we need to implement the `TeamAppsService.listTeamApps()` method. It will use the same _api_ call but instead of mapping `V1Deployment` to a team name, it will map them to `TeamApp` objects. The relevant code will look like:
 
 ```java
 public List<TeamApp> listTeamApps(String team) {
@@ -292,11 +295,11 @@ private TeamApp toTeamApp(V1Deployment v1Deployment) {
 }
 ```
 
-Also, notice that the `labelSelector` argument is of the form `team=TEAM_NAME`. This will ensure we only get *deployment* objects belonging to the given team.
+Also, notice that the `labelSelector` argument is of the form `team=TEAM_NAME`. This will ensure we only get _deployment_ objects belonging to the given team.
 
 ### Using the service to serve the results
 
-At this point, we can use this *service* bean to lookup the information. We will introduce a *controller* to front this *service* functionality. The *controller* can look like this:
+At this point, we can use this _service_ bean to lookup the information. We will introduce a _controller_ to front this _service_ functionality. The _controller_ can look like this:
 
 ```java
 import lombok.RequiredArgsConstructor;
@@ -329,11 +332,11 @@ Notice the use of `@RequiredArgsConstructor` annotation. It is another time save
 
 ### Whats next
 
-The APIs we used above make synchronous calls to the Kubernetes API server. In a [future post](../2021-09-08-show-deployments-async), we will explore how to enable the same functionality using asynchronous mechanisms provided by the Kubernetes API. 
+The APIs we used above make synchronous calls to the Kubernetes API server. In a [future post](../2021-09-08-show-deployments-async), we will explore how to enable the same functionality using asynchronous mechanisms provided by the Kubernetes API.
 
 ### Conclusion
 
-In this post we introduced the [Kubernetes Java Client](https://github.com/kubernetes-client/java). It is relatively easy to use the library to automate, monitor, and/or extend the Kubernetes platform. Most of the community uses *Go* programming language for these purposes and there are lots of good reasons to do that. Fast startup times, small footprint native executables, efficient threading support, etc.
+In this post we introduced the [Kubernetes Java Client](https://github.com/kubernetes-client/java). It is relatively easy to use the library to automate, monitor, and/or extend the Kubernetes platform. Most of the community uses _Go_ programming language for these purposes and there are lots of good reasons to do that. Fast startup times, small footprint native executables, efficient threading support, etc.
 
 Java programs can achieve all these qualities as well. Java has a large open-source libraries ecosystem and the collective community has vast experience in designing resilient and scalable systems. The prevalence of spring-boot, reactive programming, and upcoming [native-image capabilities with GraalVM](https://www.graalvm.org/reference-manual/native-image/) are good indicators that Java will stay relevant even in the Kubernetes ecosystem.
 

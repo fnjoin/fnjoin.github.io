@@ -3,6 +3,7 @@ title: |
     AI Coding Tool Tips: 7 types of things I put in my rule files.
 author: Archie Cowan
 subtitle: Why your AI needs Polaroids, notes, and tattoos to remember how you work
+excerpt: Like Leonard Shelby from Memento, AI assistants forget everything between conversations. Learn the seven types of external memory—rule files—that transform your AI from confused newcomer to knowledgeable teammate who remembers your preferences and patterns.
 date: 2025-12-24
 coverImage:
     imageSrc: /img/coding-with-leonard-shelby/head-img.png

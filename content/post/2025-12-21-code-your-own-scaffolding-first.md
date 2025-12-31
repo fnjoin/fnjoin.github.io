@@ -2,6 +2,10 @@
 title: "AI Coding Tool Tips: Code Your Own Scaffolding First"
 author: Archie Cowan
 subtitle: Write 200 lines yourself before asking AI for 2,000—your code becomes the perfect prompt
+excerpt: >
+    Stop arguing with chatbots about TypeScript vs JavaScript. Learn how to scaffold projects before AI writes 
+    application code, turning your workspace structure into the perfect prompt that eliminates guesswork and gets 
+    you building features faster.
 date: 2025-12-21
 coverImage:
     imageSrc: /img/code-your-own-scaffolding/head-img.png

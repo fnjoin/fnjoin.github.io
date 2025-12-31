@@ -2,6 +2,7 @@
 title: "AI Coding Tool Tips: A failing test is worth a thousand prompts"
 author: Archie Cowan
 subtitle: Stop writing paragraphs explaining what you want—write one failing test instead
+excerpt: Learn why failing tests eliminate ambiguity, how they catch meaning instead of just bugs, and the simple prompt that turns your test suite into an AI coding superpower.
 date: 2025-12-25
 coverImage:
     imageSrc: /img/2025-12-25-failing-test/head-img.png

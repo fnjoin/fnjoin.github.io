@@ -1,16 +1,18 @@
 ---
 title: 10x Faster Spring Boot Startup Times
 subtitle: Spring Native Startup Performance
+excerpt: Achieve 10x faster startup and 5x less memory usage with Spring Native compilation. Learn how to compile Spring Boot apps to native executables that start in milliseconds instead of seconds, perfect for serverless and container environments.
 author: Salman Malik
 date: 2022-03-20
-tags: ["kubernetes", "native", "java", "buildpacks", "performance", "spring-boot"]
+tags:
+    ["kubernetes", "native", "java", "buildpacks", "performance", "spring-boot"]
 ---
 
 Applications based on spring-boot are not known for extremely fast startup times and low memory usage. Usually spring-boot application are meant for long running backend processes and we have learned to live with the startup time and higher memory usage. This is because leveraging spring-boot solves so many other problems for the developer and speeds up the overall development process. In other words, we are OK with more developer productivity at the cost of higher resource usage at runtime specially at application startup.
 
 ## Introducing spring-native
 
-This situation is about to change for the better with upcoming spring-boot `3.0` release and the [spring-native project](https://docs.spring.io/spring-native/docs/current/reference/htmlsingle/). With the `3.0` release, spring-boot will optionally support compiling our spring-boot apps to native executables. Because of spring-boot, we have the convenience of not having to worry about installing and maintaining server run-times like Tomcat and Jetty separately from our apps. This is because spring-boot apps, their dependencies, alongside the server runtimes are bundled together - in a single self-executable JAR. Now that self-executable is not really executable without a JRE being present on the system. With spring-boot `3.0` and specifically the  spring-native project, the JRE can be included in the built artifact and it will truly be self executable - no JRE required on the system at runtime.
+This situation is about to change for the better with upcoming spring-boot `3.0` release and the [spring-native project](https://docs.spring.io/spring-native/docs/current/reference/htmlsingle/). With the `3.0` release, spring-boot will optionally support compiling our spring-boot apps to native executables. Because of spring-boot, we have the convenience of not having to worry about installing and maintaining server run-times like Tomcat and Jetty separately from our apps. This is because spring-boot apps, their dependencies, alongside the server runtimes are bundled together - in a single self-executable JAR. Now that self-executable is not really executable without a JRE being present on the system. With spring-boot `3.0` and specifically the spring-native project, the JRE can be included in the built artifact and it will truly be self executable - no JRE required on the system at runtime.
 
 The current version of spring-native is `0.11.3` and starting with spring-boot `2.6.4`, you can already try out this experimental capability. Your project must be using either JDK 11 or 17. The easiest way to try out this capability is to rely on the spring-boot Gradle or Maven plugin's capability of using buildpacks to convert your app into an OCI image. With a slight modification in the build configuration, the generated OCI image will include a native built executable without having to bundle a JRE in the image.
 
@@ -102,7 +104,7 @@ To see the difference in performance between standard Java compiled and native c
 
 ## Running environment
 
-A bit about our compilation and running environment. The above statistics were generated on a 2019 MacBook Pro 16 with 6 core i7 and 32GB of memory. In addition, the laptop was running the latest version of macOS (Monterey - 12.2.1) and Docker Desktop (4.6.0). When the same tests ware run on an M1 MacBook Air with 8GB of memory, it was about twice as slow to do the native compile. This was because the native compile capabilities have not been optimized for an M1 chip yet and probably because the native compile is a memory intensive operation and 8GB might not have been enough. This situation on M1 based system will probably be a lot better on higher-end M1 CPUs with more memory. 
+A bit about our compilation and running environment. The above statistics were generated on a 2019 MacBook Pro 16 with 6 core i7 and 32GB of memory. In addition, the laptop was running the latest version of macOS (Monterey - 12.2.1) and Docker Desktop (4.6.0). When the same tests ware run on an M1 MacBook Air with 8GB of memory, it was about twice as slow to do the native compile. This was because the native compile capabilities have not been optimized for an M1 chip yet and probably because the native compile is a memory intensive operation and 8GB might not have been enough. This situation on M1 based system will probably be a lot better on higher-end M1 CPUs with more memory.
 
 With the increasing usage of ARM based CPUs on the server side and for personal computers (Apple M1), it is important to note that the compiled native executables are built specific to an OS and CPU platform. Since the OS bits being bundled in the OCI image are responsibility of buildpacks, we only have to make sure to perform the native compile on the same CPU platform where we intend to run it. So if the target runtime is x86 then native compile the image on x86.
 
@@ -114,5 +116,5 @@ What have you done to make you Java and specially spring-boot applications start
 
 ## References
 
-- If you want to try out working examples, please checkout the [spring-native-samples repository](https://github.com/maliksalman/spring-native-samples) - it includes both Gradle and Maven examples. Both example applications have the exact same functionality and dependencies with the only difference being the build system. The README for the project also will let you know how to compile and run the samples.
-- If you want to know how to run an app like this inside a Kubernetes cluster, see [Kubernetes with Java - Running in the Cluster](../2021-09-11-running-in-cluster)
+-   If you want to try out working examples, please checkout the [spring-native-samples repository](https://github.com/maliksalman/spring-native-samples) - it includes both Gradle and Maven examples. Both example applications have the exact same functionality and dependencies with the only difference being the build system. The README for the project also will let you know how to compile and run the samples.
+-   If you want to know how to run an app like this inside a Kubernetes cluster, see [Kubernetes with Java - Running in the Cluster](../2021-09-11-running-in-cluster)

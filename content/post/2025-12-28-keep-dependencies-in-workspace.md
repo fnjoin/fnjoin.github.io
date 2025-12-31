@@ -2,6 +2,7 @@
 title: "AI Coding Tool Tips: Keep Dependencies in Your Workspace"
 author: Archie Cowan
 subtitle: Copy dependency source code into your repo—AI reads it better than it queries APIs
+excerpt: Stop watching your AI struggle with new APIs. Learn why making library source code available in your workspace beats MCP servers, and how direct file access gives AI the context it needs to integrate unfamiliar dependencies quickly.
 date: 2025-12-28
 coverImage:
     imageSrc: /img/2025-12-28-keep-dependencies-in-workspace/head-img.png

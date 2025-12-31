@@ -2,6 +2,7 @@
 title: "AI Coding Tool Tips: AI Absorbed Every 'Works on My Machine' Bad Habit"
 author: Archie Cowan
 subtitle: AI will claim it's finished when it's 80% done—end-to-end tests tell the truth
+excerpt: Discover why AI inherits our worst "dev complete" habits and declares victory at 80% done. Learn how to use lightweight integration tests to give AI a real definition of done and catch missing pieces before you waste time debugging.
 date: 2025-12-26
 coverImage:
     imageSrc: /img/2025-12-26-ai-absorbed-every-works-on-my-machine-bad-habit/head-img.png

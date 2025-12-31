@@ -2,6 +2,7 @@
 title: "AI Coding Tool Tips: Generate Reusable Implementation Guides"
 author: Archie Cowan
 subtitle: When you solve something well, have AI write a blog post about it—now you can replicate it anywhere
+excerpt: Transform clever one-off solutions into reusable knowledge. Learn how to have AI document your best implementations as internal guides, creating a library of patterns you can reference and replicate across any project.
 date: 2025-12-29
 coverImage:
     imageSrc: /img/2025-12-29-generate-reusable-implementation-guides/head-img.png
