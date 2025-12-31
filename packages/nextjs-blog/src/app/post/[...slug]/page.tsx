@@ -90,7 +90,12 @@ export function generateMetadata({ params }: Params): Metadata {
         openGraph: {
             title,
             description,
-            images: post.ogImage ? [post.ogImage?.url] : [],
+            url: `https://www.fnjoin.com/${post.slug}/`,
+            images: post.ogImage?.url
+                ? [post.ogImage.url]
+                : post.coverImage?.imageSrc
+                  ? [post.coverImage.imageSrc]
+                  : [],
         },
         twitter: {
             card: "summary_large_image",

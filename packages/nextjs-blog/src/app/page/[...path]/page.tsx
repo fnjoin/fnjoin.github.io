@@ -58,7 +58,7 @@ export function generateMetadata({ params }: Params): Metadata {
 
     const title = `${post.title} | Join Function`;
 
-    if (post.ogImage?.url) {
+    if (post.ogImage?.url || post.coverImage?.imageSrc) {
         return {
             metadataBase: new URL("https://www.fnjoin.com"),
             title,
@@ -68,7 +68,12 @@ export function generateMetadata({ params }: Params): Metadata {
             },
             openGraph: {
                 title,
-                images: [post.ogImage?.url],
+                url: `https://www.fnjoin.com/${post.slug}/`,
+                images: post.ogImage?.url
+                    ? [post.ogImage.url]
+                    : post.coverImage?.imageSrc
+                      ? [post.coverImage.imageSrc]
+                      : [],
             },
         };
     }
@@ -82,6 +87,7 @@ export function generateMetadata({ params }: Params): Metadata {
         },
         openGraph: {
             title,
+            url: `https://www.fnjoin.com/${post.slug}/`,
         },
     };
 }

@@ -19,6 +19,7 @@ export const metadata: Metadata = {
     openGraph: {
         title,
         description,
+        url: "https://www.fnjoin.com/",
     },
 
     twitter: {
