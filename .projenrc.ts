@@ -91,6 +91,8 @@ const nextjsBlog = new NextJsBlogTypescriptAppProject({
         "strip-markdown",
         "@next/third-parties", // google analytics
         "mermaid@^10.6.1",
+        "lucide-react@latest",
+        "framer-motion@latest",
     ],
     devDeps: [
         "critters",

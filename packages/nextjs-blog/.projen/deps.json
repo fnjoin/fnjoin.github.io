@@ -169,6 +169,11 @@
       "type": "runtime"
     },
     {
+      "name": "framer-motion",
+      "version": "latest",
+      "type": "runtime"
+    },
+    {
       "name": "gray-matter",
       "version": "^4.0.3",
       "type": "runtime"
@@ -188,6 +193,11 @@
     },
     {
       "name": "image-size",
+      "type": "runtime"
+    },
+    {
+      "name": "lucide-react",
+      "version": "latest",
       "type": "runtime"
     },
     {
