@@ -69,11 +69,12 @@ export function generateMetadata({ params }: Params): Metadata {
             openGraph: {
                 title,
                 url: `https://fnjoin.com/${post.slug}/`,
+                type: "article",
                 images: post.ogImage?.url
                     ? [post.ogImage.url]
                     : post.coverImage?.imageSrc
                       ? [post.coverImage.imageSrc]
-                      : [],
+                      : ["/fnjoin.png"],
             },
         };
     }
@@ -88,6 +89,8 @@ export function generateMetadata({ params }: Params): Metadata {
         openGraph: {
             title,
             url: `https://fnjoin.com/${post.slug}/`,
+            type: "article",
+            images: ["/fnjoin.png"],
         },
     };
 }

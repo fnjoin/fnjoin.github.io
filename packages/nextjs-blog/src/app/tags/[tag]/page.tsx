@@ -47,6 +47,13 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
             index: hasCustomContent, // Only index if there's custom content
             follow: true,
         },
+        openGraph: {
+            title: `Posts tagged with "${tag}"`,
+            description: `All blog posts tagged with ${tag}`,
+            url: `https://fnjoin.com/tags/${tag}`,
+            type: "website",
+            images: ["/fnjoin.png"],
+        },
     };
 }
 

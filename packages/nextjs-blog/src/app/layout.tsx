@@ -20,6 +20,15 @@ export const metadata: Metadata = {
         title,
         description,
         url: "https://fnjoin.com/",
+        type: "website",
+        images: [
+            {
+                url: "/fnjoin.png",
+                width: 1200,
+                height: 630,
+                alt: "Join Function - Cloud automation best practices",
+            },
+        ],
     },
 
     twitter: {

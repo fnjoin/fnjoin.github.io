@@ -114,7 +114,9 @@ The frontmatter automatically generates these HTML meta tags:
 <!-- From excerpt -->
 <meta name="description" content="Excerpt content here" />
 
-<!-- From ogImage or coverImage -->
+<!-- Required OpenGraph tags (og:title, og:type, og:image, og:url) -->
+<meta property="og:title" content="Post Title | Join Function" />
+<meta property="og:type" content="article" />
 <meta
     property="og:image"
     content="https://fnjoin.com/img/post-slug/social.webp"
@@ -124,6 +126,13 @@ The frontmatter automatically generates these HTML meta tags:
 <!-- Canonical URL (with trailing slash) -->
 <link rel="canonical" href="https://fnjoin.com/post/post-slug/" />
 ```
+
+**OpenGraph Requirements:**
+
+-   All pages include the four required OpenGraph tags: `og:title`, `og:type`, `og:image`, `og:url`
+-   Posts use `type: "article"`, other pages use `type: "website"`
+-   Default fallback image (`/fnjoin.png`) when no custom image exists
+-   Images should be 1200x630px for optimal social sharing
 
 #### Excerpt Writing Guidelines
 
@@ -158,6 +167,8 @@ _Infrastructure Guide (practical):_
 ```yaml
 excerpt: Set up remote development with VS Code's SSH plugin and automatic port forwarding. Learn how to use AWS CDK to create and delete EC2 development environments with encrypted storage.
 ```
+
+A general recommendation today is to keep your page description between 110 and 160 characters, although Google can sometimes show longer snippets.
 
 ### 3. Author Management
 

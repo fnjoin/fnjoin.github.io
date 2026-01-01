@@ -91,11 +91,12 @@ export function generateMetadata({ params }: Params): Metadata {
             title,
             description,
             url: `https://fnjoin.com/${post.slug}/`,
+            type: "article",
             images: post.ogImage?.url
                 ? [post.ogImage.url]
                 : post.coverImage?.imageSrc
                   ? [post.coverImage.imageSrc]
-                  : [],
+                  : ["/fnjoin.png"],
         },
         twitter: {
             card: "summary_large_image",
