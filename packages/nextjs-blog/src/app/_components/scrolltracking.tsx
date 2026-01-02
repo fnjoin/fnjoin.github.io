@@ -1,6 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 
+declare global {
+    interface Window {
+        gtag: (command: string, action: string, parameters: any) => void;
+    }
+}
+
 export interface ScrollTrackerProps {
     postId: string;
 }
@@ -24,12 +30,14 @@ const ScrollTracker = ({ postId }: ScrollTrackerProps) => {
                 const timeSpentSeconds = Math.floor(timeSpent / 1000);
 
                 console.log("time spent", timeSpentSeconds);
-                // Send an event to Google Analytics with the time spent
-                window.gtag("event", "read_complete", {
-                    event_category: "Blog",
-                    event_label: postId,
-                    value: timeSpentSeconds, // You can track the time spent in seconds
-                });
+                // Send an event to Google Analytics with the time spent (only if gtag is available and user consented)
+                if (typeof window !== "undefined" && window.gtag) {
+                    window.gtag("event", "read_complete", {
+                        event_category: "Blog",
+                        event_label: postId,
+                        value: timeSpentSeconds, // You can track the time spent in seconds
+                    });
+                }
             }
         };
 

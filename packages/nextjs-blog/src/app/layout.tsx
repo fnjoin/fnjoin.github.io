@@ -1,8 +1,8 @@
-import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import React from "react";
 import Footer from "@/app/_components/footer";
+import CookieBanner from "@/components/cookie-banner";
 
 import "./globals.css";
 
@@ -88,11 +88,11 @@ export default function RootLayout({
                     type="application/rss+xml"
                     title="fn:join"
                 />
-                <GoogleAnalytics gaId="G-ZPSKLMVM2V" />
             </head>
             <body className={inter.className}>
                 <div className="min-h-screen">{children}</div>
                 <Footer />
+                <CookieBanner />
             </body>
         </html>
     );

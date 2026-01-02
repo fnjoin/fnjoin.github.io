@@ -1,5 +1,6 @@
 import React from "react";
 import Container from "@/app/_components/container";
+import CookieSettingsLink from "@/components/cookie-settings-link";
 
 export function Footer() {
     const currentYear = new Date().getFullYear();
@@ -20,6 +21,9 @@ export function Footer() {
                     <div className="flex flex-col lg:flex-row justify-center items-center lg:pl-4 lg:w-1/2">
                         Views and opinions expressed by the authors are solely
                         their own and are not the views of their employers.
+                    </div>
+                    <div className="flex justify-center lg:justify-end lg:pl-4 mt-4 lg:mt-0">
+                        <CookieSettingsLink />
                     </div>
                 </div>
             </Container>

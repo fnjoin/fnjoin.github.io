@@ -71,8 +71,7 @@ export const UsageInstructions: React.FC = () => {
                         </strong>
                         <p>
                             A: All calendar data is stored locally in your
-                            browser&apos;s localStorage. Nothing is sent to or
-                            stored on external servers.
+                            browser.
                         </p>
                     </div>
                     <div>
