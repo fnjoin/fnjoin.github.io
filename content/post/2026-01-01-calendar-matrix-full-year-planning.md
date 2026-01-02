@@ -21,9 +21,9 @@ Last year I found it helpful to look at a week at a time. How am I going to spen
 
 I also tried quarterly planning. There are 13 weeks in a quarter. So, what are the 5-10 things you want to achieve in that quarter? But I haven't latched on to this very well over the last few years.
 
-**Therefore** I realized the problem: I can't just roll with the punches as they arrive. Best defense of your time is a good offense. **But** weekly planning only handles habits, and quarterly feels too abstract.
+I realized the problem: I can't just roll with the punches as they arrive. Best defense of your time is a good offense. But weekly planning only handles habits, and quarterly feels too abstract.
 
-**Therefore** I wanted to try looking at an entire year at a time.
+I wanted to try looking at an entire year at a time.
 
 Naturally, this turned into a, hopefully short, obsession with year long calendars. Naturally, I didn't want to do it with anything I could have just used and then got on with it. I had to do it a certain way that was in my head. Sigh.
 
@@ -57,7 +57,7 @@ The first view shows how I can create a matrix of 28 by 14 rows of days - the en
 
 Here's what I realized: without macro structure for year-level planning, I kept missing things I could have prioritized sooner.
 
-If I'd known I should be 25% done with that certification by March, 50% by June, 75% by September - I would have caught the problem in spring, not December. **But** monthly calendars don't show you progress against annual goals. They show you meetings and deadlines, not the bigger picture.
+If I'd known I should be 25% done with that certification by March, 50% by June, 75% by September - I would have caught the problem in spring, not December. But monthly calendars don't show you progress against annual goals. They show you meetings and deadlines, not the bigger picture.
 
 You end up with this weird disconnect: big goals live in your head or some planning doc, while your actual time lives in Google Calendar. They never talk to each other.
 
