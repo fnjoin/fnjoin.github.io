@@ -2,11 +2,49 @@
 
 import { useState, useEffect } from "react";
 
+// A/B test variants
+const BANNER_VARIANTS = {
+    A: {
+        id: "conversational",
+        mainText:
+            "We're just developers sharing what we've learned about cloud automation and development. Analytics help us understand which content is actually useful to you, so we can write more of what helps and less of what doesn't. No ads, no tracking across sites—just knowing if our writing is worth your time.",
+        settingsTitle: "Help Me Write Better Content",
+        settingsDescription:
+            "As developers, we rely on analytics to understand what's actually helpful. You can change these settings anytime.",
+        cookieDescription:
+            "Helps us see which articles are useful, how long people read, and what topics to focus on. No personal data, no cross-site tracking, no ads. Also sugar-free, gluten-free, and won't make you gain weight.",
+    },
+    B: {
+        id: "concise",
+        mainText:
+            "This site uses analytics cookies to improve content quality. No personal data collection or cross-site tracking.",
+        settingsTitle: "Cookie Preferences",
+        settingsDescription:
+            "Manage your cookie preferences. You can change these settings at any time.",
+        cookieDescription:
+            "Analytics cookies help us understand which content is most valuable to readers. No personal information is collected.",
+    },
+};
+
 export default function CookieBanner() {
     const [showBanner, setShowBanner] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
+    const [variant, setVariant] = useState<"A" | "B">("A");
 
     useEffect(() => {
+        // Assign A/B test variant (50/50 split)
+        const existingVariant = localStorage.getItem("cookie-banner-variant");
+        if (
+            existingVariant &&
+            (existingVariant === "A" || existingVariant === "B")
+        ) {
+            setVariant(existingVariant as "A" | "B");
+        } else {
+            const newVariant = Math.random() < 0.5 ? "A" : "B";
+            setVariant(newVariant);
+            localStorage.setItem("cookie-banner-variant", newVariant);
+        }
+
         // Check if user has already made a choice
         const consent = localStorage.getItem("cookie-consent");
         if (!consent) {
@@ -21,6 +59,10 @@ export default function CookieBanner() {
         localStorage.setItem("cookie-consent", "accepted");
         setShowBanner(false);
         setShowSettings(false);
+
+        // Track acceptance with gtag event
+        trackConsentEvent("accept", variant);
+
         loadGoogleAnalytics();
     };
 
@@ -28,12 +70,28 @@ export default function CookieBanner() {
         localStorage.setItem("cookie-consent", "rejected");
         setShowBanner(false);
         setShowSettings(false);
+
+        // Note: Can't track rejections with gtag since analytics won't be loaded
+        // Could use a different tracking method here if needed
+
         // Clear any existing GA cookies
         clearGoogleAnalytics();
     };
 
     const handleShowSettings = () => {
         setShowSettings(true);
+    };
+
+    const trackConsentEvent = (action: "accept", testVariant: "A" | "B") => {
+        // Send gtag event for A/B test tracking
+        if (typeof window !== "undefined" && window.gtag) {
+            window.gtag("event", "cookie_consent", {
+                event_category: "GDPR",
+                event_label: `variant_${testVariant}`,
+                action: action,
+                variant: testVariant,
+            });
+        }
     };
 
     const clearGoogleAnalytics = () => {
@@ -60,23 +118,24 @@ export default function CookieBanner() {
         function gtag(...args: any[]) {
             window.dataLayer.push(args);
         }
+        (window as any).gtag = gtag; // Make gtag available globally for tracking
         gtag("js", new Date());
         gtag("config", GA_MEASUREMENT_ID);
     };
 
     // Settings panel for consent withdrawal
     if (showSettings) {
+        const currentVariant = BANNER_VARIANTS[variant];
+
         return (
             <div className="fixed bottom-0 left-0 right-0 bg-gray-900 text-white p-4 z-50">
                 <div className="max-w-4xl mx-auto">
                     <div className="mb-4">
                         <h3 className="text-lg font-semibold mb-2">
-                            Help Me Write Better Content
+                            {currentVariant.settingsTitle}
                         </h3>
                         <p className="text-sm text-gray-300 mb-4">
-                            As developers, we rely on analytics to understand
-                            what&apos;s actually helpful. You can change these
-                            settings anytime.
+                            {currentVariant.settingsDescription}
                         </p>
                     </div>
 
@@ -87,12 +146,7 @@ export default function CookieBanner() {
                                     Analytics Cookies
                                 </h4>
                                 <p className="text-sm text-gray-300 mt-1">
-                                    Helps us see which articles are useful, how
-                                    long people read, and what topics to focus
-                                    on. No personal data, no cross-site
-                                    tracking, no ads. Also sugar-free,
-                                    gluten-free, and won&apos;t make you gain
-                                    weight.
+                                    {currentVariant.cookieDescription}
                                 </p>
                             </div>
                             <div className="ml-4 flex gap-2">
@@ -141,17 +195,14 @@ export default function CookieBanner() {
 
     if (!showBanner) return null;
 
+    const currentVariant = BANNER_VARIANTS[variant];
+
     return (
         <div className="fixed bottom-0 left-0 right-0 bg-gray-900 text-white p-4 z-50">
             <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="text-sm">
                     <p>
-                        We&apos;re just developers sharing what we&apos;ve
-                        learned about cloud automation and development.
-                        Analytics help us understand which content is actually
-                        useful to you, so we can write more of what helps and
-                        less of what doesn&apos;t. No ads, no tracking across
-                        sites—just knowing if our writing is worth your time.{" "}
+                        {currentVariant.mainText}{" "}
                         <button
                             onClick={handleShowSettings}
                             className="underline hover:no-underline"
