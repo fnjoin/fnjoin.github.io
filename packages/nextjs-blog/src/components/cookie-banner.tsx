@@ -32,6 +32,9 @@ export default function CookieBanner() {
     const [variant, setVariant] = useState<"A" | "B">("A");
 
     useEffect(() => {
+        // Only run on client side
+        if (typeof window === "undefined") return;
+
         // Assign A/B test variant (50/50 split)
         const existingVariant = localStorage.getItem("cookie-banner-variant");
         if (
@@ -60,10 +63,12 @@ export default function CookieBanner() {
         setShowBanner(false);
         setShowSettings(false);
 
-        // Track acceptance with gtag event
-        trackConsentEvent("accept", variant);
-
         loadGoogleAnalytics();
+
+        // Track acceptance with gtag event (with delay to ensure gtag is loaded)
+        setTimeout(() => {
+            trackConsentEvent("accept", variant);
+        }, 500);
     };
 
     const handleReject = () => {
@@ -84,14 +89,24 @@ export default function CookieBanner() {
 
     const trackConsentEvent = (action: "accept", testVariant: "A" | "B") => {
         // Send gtag event for A/B test tracking
-        if (typeof window !== "undefined" && window.gtag) {
-            window.gtag("event", "cookie_consent", {
-                event_category: "GDPR",
-                event_label: `variant_${testVariant}`,
-                action: action,
-                variant: testVariant,
-            });
-        }
+        // Use a retry mechanism since gtag might not be immediately available
+        const sendEvent = () => {
+            if (typeof window !== "undefined" && window.gtag) {
+                window.gtag("event", "cookie_consent", {
+                    event_category: "GDPR",
+                    event_label: `variant_${testVariant}`,
+                    action: action,
+                    variant: testVariant,
+                });
+                console.log("Consent event tracked:", testVariant);
+            } else {
+                // Retry after a short delay if gtag isn't ready yet
+                setTimeout(sendEvent, 100);
+            }
+        };
+
+        // Try immediately, then retry if needed
+        sendEvent();
     };
 
     const clearGoogleAnalytics = () => {
@@ -107,20 +122,35 @@ export default function CookieBanner() {
     const loadGoogleAnalytics = () => {
         const GA_MEASUREMENT_ID = "G-ZPSKLMVM2V";
 
+        // Check if gtag is already loaded to prevent duplicates
+        if ((window as any).gtag) {
+            return;
+        }
+
         // Load gtag script
         const script = document.createElement("script");
         script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
         script.async = true;
-        document.head.appendChild(script);
 
-        // Initialize gtag
-        window.dataLayer = window.dataLayer || [];
-        function gtag(...args: any[]) {
-            window.dataLayer.push(args);
-        }
-        (window as any).gtag = gtag; // Make gtag available globally for tracking
-        gtag("js", new Date());
-        gtag("config", GA_MEASUREMENT_ID);
+        // Wait for script to load before initializing
+        script.onload = () => {
+            // Initialize gtag
+            window.dataLayer = window.dataLayer || [];
+            function gtag(...args: any[]) {
+                window.dataLayer.push(args);
+            }
+            (window as any).gtag = gtag; // Make gtag available globally for tracking
+            gtag("js", new Date());
+            gtag("config", GA_MEASUREMENT_ID);
+
+            console.log("Google Analytics loaded successfully");
+        };
+
+        script.onerror = () => {
+            console.error("Failed to load Google Analytics script");
+        };
+
+        document.head.appendChild(script);
     };
 
     // Settings panel for consent withdrawal
