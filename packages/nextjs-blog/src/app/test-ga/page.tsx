@@ -75,6 +75,26 @@ export default function TestGA() {
                         console.log("Current cookies:", document.cookie);
                         console.log("Domain:", window.location.hostname);
                         console.log("Protocol:", window.location.protocol);
+                        console.log("User Agent:", navigator.userAgent);
+
+                        // Check if GA script is loaded
+                        const gaScripts = Array.from(document.scripts).filter(
+                            (script) =>
+                                script.src.includes("googletagmanager.com"),
+                        );
+                        console.log("GA scripts loaded:", gaScripts.length);
+                        gaScripts.forEach((script, i) => {
+                            console.log(`GA script ${i + 1}:`, script.src);
+                        });
+
+                        // Check network requests in console
+                        console.log("Check Network tab for requests to:");
+                        console.log(
+                            "- https://www.googletagmanager.com/gtag/js?id=G-ZPSKLMVM2V",
+                        );
+                        console.log(
+                            "- https://www.google-analytics.com/g/collect",
+                        );
                         console.log("=========================");
                     }}
                     className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
@@ -136,12 +156,87 @@ export default function TestGA() {
                     </button>
                 </div>
 
-                <button
-                    onClick={clearResults}
-                    className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
-                >
-                    Clear Results
-                </button>
+                <div className="flex gap-4">
+                    <button
+                        onClick={clearResults}
+                        className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
+                    >
+                        Clear Results
+                    </button>
+
+                    <button
+                        onClick={() => {
+                            console.log("=== DATALAYER INSPECTION ===");
+                            const dataLayer = (window as any).dataLayer || [];
+                            console.log("DataLayer length:", dataLayer.length);
+                            dataLayer.forEach((entry: any, index: number) => {
+                                console.log(`Entry ${index}:`, entry);
+                            });
+
+                            // Check if any network requests are being made
+                            console.log("Check Network tab for:");
+                            console.log(
+                                "- Requests to google-analytics.com/g/collect",
+                            );
+                            console.log(
+                                "- Status codes (200 = success, 4xx/5xx = error)",
+                            );
+                            console.log("============================");
+
+                            setEventResults((prev) => [
+                                ...prev,
+                                `DataLayer has ${dataLayer.length} entries - check console for details`,
+                            ]);
+                        }}
+                        className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
+                    >
+                        Inspect DataLayer
+                    </button>
+
+                    <button
+                        onClick={() => {
+                            // Test if the measurement ID is valid by checking the script load
+                            const testId = "G-ZPSKLMVM2V";
+                            console.log("Testing measurement ID:", testId);
+
+                            fetch(
+                                `https://www.googletagmanager.com/gtag/js?id=${testId}`,
+                            )
+                                .then((response) => {
+                                    if (response.ok) {
+                                        console.log(
+                                            "✅ GA script accessible - measurement ID is valid",
+                                        );
+                                        setEventResults((prev) => [
+                                            ...prev,
+                                            "✅ Measurement ID is valid - script accessible",
+                                        ]);
+                                    } else {
+                                        console.error(
+                                            "❌ GA script not accessible - check measurement ID",
+                                        );
+                                        setEventResults((prev) => [
+                                            ...prev,
+                                            "❌ Measurement ID may be invalid - script not accessible",
+                                        ]);
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error(
+                                        "❌ Network error testing GA script:",
+                                        error,
+                                    );
+                                    setEventResults((prev) => [
+                                        ...prev,
+                                        "❌ Network error - check connection or ad blockers",
+                                    ]);
+                                });
+                        }}
+                        className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                    >
+                        Test Measurement ID
+                    </button>
+                </div>
             </div>
 
             {eventResults.length > 0 && (

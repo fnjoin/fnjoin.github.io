@@ -148,19 +148,34 @@ export default function CookieBanner() {
         const isLocalhost =
             window.location.hostname === "localhost" ||
             window.location.hostname === "127.0.0.1";
+        const isStaticSite =
+            window.location.hostname.includes("github.io") ||
+            window.location.hostname === "fnjoin.com";
 
         gtag("config", GA_MEASUREMENT_ID, {
             debug_mode: true,
             send_page_view: true,
+            // For static sites, we need to be more explicit about cookie settings
             ...(isLocalhost && {
                 cookie_domain: "none",
                 storage: "none",
+            }),
+            ...(isStaticSite && {
+                cookie_domain: "auto",
+                cookie_expires: 63072000, // 2 years in seconds
+                anonymize_ip: false,
+                allow_google_signals: true,
+                cookie_update: true,
             }),
         });
 
         console.log(
             "GA configured for",
-            isLocalhost ? "localhost" : "production",
+            isLocalhost
+                ? "localhost"
+                : isStaticSite
+                  ? "static site"
+                  : "production",
         );
 
         console.log("gtag function created and configured");
@@ -196,6 +211,26 @@ export default function CookieBanner() {
                         .split(";")
                         .filter((cookie) => cookie.includes("_ga"));
                     console.log("GA-specific cookies:", gaCookies);
+                    console.log(
+                        "GA Measurement ID being used:",
+                        GA_MEASUREMENT_ID,
+                    );
+                    console.log(
+                        "Global gtag function:",
+                        typeof (window as any).gtag,
+                    );
+                    console.log("DataLayer length:", window.dataLayer?.length);
+
+                    // Additional debugging - check if GA is actually working
+                    if (gaCookies.length === 0) {
+                        console.warn(
+                            "⚠️ No GA cookies found! Possible issues:",
+                        );
+                        console.warn("1. Invalid measurement ID");
+                        console.warn("2. Ad blocker blocking GA");
+                        console.warn("3. Network issues");
+                        console.warn("4. Domain/HTTPS issues");
+                    }
                 }, 2000);
             }, 1000);
         };
