@@ -40,11 +40,10 @@ export default function GADebug() {
         return () => clearInterval(interval);
     }, []);
 
-    // Only show in development or when explicitly enabled
+    // Only show when explicitly enabled via localStorage
     if (
-        process.env.NODE_ENV === "production" &&
-        (typeof window === "undefined" ||
-            !localStorage.getItem("show-ga-debug"))
+        typeof window === "undefined" ||
+        !localStorage.getItem("show-ga-debug")
     ) {
         return null;
     }

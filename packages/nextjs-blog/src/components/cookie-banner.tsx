@@ -88,25 +88,27 @@ export default function CookieBanner() {
     };
 
     const trackConsentEvent = (action: "accept", testVariant: "A" | "B") => {
-        // Send gtag event for A/B test tracking
-        // Use a retry mechanism since gtag might not be immediately available
-        const sendEvent = () => {
-            if (typeof window !== "undefined" && window.gtag) {
-                window.gtag("event", "cookie_consent", {
-                    event_category: "GDPR",
-                    event_label: `variant_${testVariant}`,
-                    action: action,
-                    variant: testVariant,
-                });
-                console.log("Consent event tracked:", testVariant);
-            } else {
-                // Retry after a short delay if gtag isn't ready yet
-                setTimeout(sendEvent, 100);
-            }
-        };
+        console.log("trackConsentEvent called with:", action, testVariant);
 
-        // Try immediately, then retry if needed
-        sendEvent();
+        if (typeof window !== "undefined" && window.gtag) {
+            console.log("Sending consent event to GA...");
+            window.gtag("event", "cookie_consent", {
+                event_category: "GDPR",
+                event_label: `variant_${testVariant}`,
+                action: action,
+                variant: testVariant,
+            });
+            console.log("Consent event sent:", testVariant);
+
+            // Also send a simple test event
+            window.gtag("event", "test_event", {
+                event_category: "Debug",
+                event_label: "cookie_banner_test",
+            });
+            console.log("Test event sent");
+        } else {
+            console.error("gtag not available when trying to track consent");
+        }
     };
 
     const clearGoogleAnalytics = () => {
@@ -124,26 +126,78 @@ export default function CookieBanner() {
 
         // Check if gtag is already loaded to prevent duplicates
         if ((window as any).gtag) {
+            console.log("Google Analytics already loaded");
             return;
         }
 
-        // Load gtag script
+        // Initialize dataLayer first
+        window.dataLayer = window.dataLayer || [];
+
+        // Create the gtag function that pushes to dataLayer
+        function gtag(...args: any[]) {
+            window.dataLayer.push(args);
+        }
+
+        // Attach gtag to window
+        (window as any).gtag = gtag;
+
+        // Initialize with current timestamp
+        gtag("js", new Date());
+
+        // Configure GA with localhost-friendly settings
+        const isLocalhost =
+            window.location.hostname === "localhost" ||
+            window.location.hostname === "127.0.0.1";
+
+        gtag("config", GA_MEASUREMENT_ID, {
+            debug_mode: true,
+            send_page_view: true,
+            ...(isLocalhost && {
+                cookie_domain: "none",
+                storage: "none",
+            }),
+        });
+
+        console.log(
+            "GA configured for",
+            isLocalhost ? "localhost" : "production",
+        );
+
+        console.log("gtag function created and configured");
+
+        // Load the Google Analytics script
         const script = document.createElement("script");
         script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
         script.async = true;
 
-        // Wait for script to load before initializing
         script.onload = () => {
-            // Initialize gtag
-            window.dataLayer = window.dataLayer || [];
-            function gtag(...args: any[]) {
-                window.dataLayer.push(args);
-            }
-            (window as any).gtag = gtag; // Make gtag available globally for tracking
-            gtag("js", new Date());
-            gtag("config", GA_MEASUREMENT_ID);
+            console.log("Google Analytics script loaded successfully");
+            console.log("Current domain:", window.location.hostname);
+            console.log(
+                "Current cookies before GA processing:",
+                document.cookie,
+            );
+            console.log("dataLayer contents:", window.dataLayer);
 
-            console.log("Google Analytics loaded successfully");
+            // Send a test page view event after script loads
+            setTimeout(() => {
+                console.log("Sending test page view...");
+                gtag("event", "page_view", {
+                    page_title: document.title,
+                    page_location: window.location.href,
+                });
+                console.log("Test page_view event sent");
+                console.log("dataLayer after page view:", window.dataLayer);
+
+                // Check cookies again after a moment
+                setTimeout(() => {
+                    console.log("Cookies after page view:", document.cookie);
+                    const gaCookies = document.cookie
+                        .split(";")
+                        .filter((cookie) => cookie.includes("_ga"));
+                    console.log("GA-specific cookies:", gaCookies);
+                }, 2000);
+            }, 1000);
         };
 
         script.onerror = () => {
@@ -151,6 +205,12 @@ export default function CookieBanner() {
         };
 
         document.head.appendChild(script);
+
+        console.log(
+            "Google Analytics initialization complete with ID:",
+            GA_MEASUREMENT_ID,
+        );
+        console.log("dataLayer:", window.dataLayer);
     };
 
     // Settings panel for consent withdrawal

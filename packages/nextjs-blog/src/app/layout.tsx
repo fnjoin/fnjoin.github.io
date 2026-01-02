@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import React from "react";
 import Footer from "@/app/_components/footer";
 import CookieBanner from "@/components/cookie-banner";
+import GADebug from "@/components/ga-debug";
 
 import "./globals.css";
 
@@ -93,6 +94,7 @@ export default function RootLayout({
                 <div className="min-h-screen">{children}</div>
                 <Footer />
                 <CookieBanner />
+                <GADebug />
             </body>
         </html>
     );
