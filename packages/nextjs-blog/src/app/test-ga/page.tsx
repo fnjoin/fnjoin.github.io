@@ -1,15 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-    title: "Google Analytics Test Page",
-    robots: {
-        index: false,
-        follow: false,
-    },
-};
 
 export default function TestGA() {
     const [eventResults, setEventResults] = useState<string[]>([]);
@@ -57,7 +48,8 @@ export default function TestGA() {
                     <li>Accept cookies using the banner at the bottom</li>
                     <li>Enable GA debug panel (button below)</li>
                     <li>
-                        Send test events and check your browser's Network tab
+                        Send test events and check your browser&apos;s Network
+                        tab
                     </li>
                     <li>
                         Look for requests to{" "}
@@ -171,7 +163,10 @@ export default function TestGA() {
                 </h3>
                 <ul className="list-disc list-inside text-blue-700 space-y-1">
                     <li>Open browser DevTools → Network tab</li>
-                    <li>Filter by "google-analytics.com" or "collect"</li>
+                    <li>
+                        Filter by &quot;google-analytics.com&quot; or
+                        &quot;collect&quot;
+                    </li>
                     <li>
                         Look for POST requests to <code>/g/collect</code>
                     </li>
