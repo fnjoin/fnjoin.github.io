@@ -42,7 +42,7 @@ export default function CookieSettingsLink() {
                             </h3>
                             <p className="text-sm text-gray-300 mb-4">
                                 As developers, we rely on analytics to
-                                understand what's actually helpful. You can
+                                understand what&apos;s actually helpful. You can
                                 change these settings anytime.
                             </p>
                         </div>
@@ -58,8 +58,8 @@ export default function CookieSettingsLink() {
                                         how long people read, and what topics to
                                         focus on. No personal data, no
                                         cross-site tracking, no ads. Also
-                                        sugar-free, gluten-free, and won't make
-                                        you gain weight.
+                                        sugar-free, gluten-free, and won&apos;t
+                                        make you gain weight.
                                     </p>
                                 </div>
                                 <div className="ml-4 flex gap-2">
