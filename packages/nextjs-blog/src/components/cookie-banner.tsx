@@ -133,106 +133,99 @@ export default function CookieBanner() {
         // Initialize dataLayer first
         window.dataLayer = window.dataLayer || [];
 
-        // Create the gtag function that pushes to dataLayer
-        function gtag(...args: any[]) {
+        // DON'T create our own gtag function - let GA script create the real one
+        // Just create a temporary one that will be replaced
+        function gtagTemp(...args: any[]) {
             window.dataLayer.push(args);
         }
 
-        // Attach gtag to window
-        (window as any).gtag = gtag;
+        // Only set gtag if it doesn't exist yet
+        if (!(window as any).gtag) {
+            (window as any).gtag = gtagTemp;
+        }
 
-        // Initialize with current timestamp
-        gtag("js", new Date());
-
-        // Configure GA with localhost-friendly settings
-        const isLocalhost =
-            window.location.hostname === "localhost" ||
-            window.location.hostname === "127.0.0.1";
-        const isStaticSite =
-            window.location.hostname.includes("github.io") ||
-            window.location.hostname === "fnjoin.com";
-
-        gtag("config", GA_MEASUREMENT_ID, {
-            debug_mode: true,
-            send_page_view: true,
-            // For static sites, we need to be more explicit about cookie settings
-            ...(isLocalhost && {
-                cookie_domain: "none",
-                storage: "none",
-            }),
-            ...(isStaticSite && {
-                cookie_domain: "auto",
-                cookie_expires: 63072000, // 2 years in seconds
-                anonymize_ip: false,
-                allow_google_signals: true,
-                cookie_update: true,
-            }),
-        });
-
-        console.log(
-            "GA configured for",
-            isLocalhost
-                ? "localhost"
-                : isStaticSite
-                  ? "static site"
-                  : "production",
-        );
-
-        console.log("gtag function created and configured");
-
-        // Load the Google Analytics script
+        // Load the Google Analytics script FIRST
         const script = document.createElement("script");
         script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
         script.async = true;
 
         script.onload = () => {
             console.log("Google Analytics script loaded successfully");
-            console.log("Current domain:", window.location.hostname);
-            console.log(
-                "Current cookies before GA processing:",
-                document.cookie,
-            );
-            console.log("dataLayer contents:", window.dataLayer);
 
-            // Send a test page view event after script loads
-            setTimeout(() => {
-                console.log("Sending test page view...");
-                gtag("event", "page_view", {
-                    page_title: document.title,
-                    page_location: window.location.href,
-                });
-                console.log("Test page_view event sent");
-                console.log("dataLayer after page view:", window.dataLayer);
+            // Wait for the real gtag function to be available
+            const waitForGtag = () => {
+                // Check if the real gtag function is now available
+                const realGtag = (window as any).gtag;
 
-                // Check cookies again after a moment
-                setTimeout(() => {
-                    console.log("Cookies after page view:", document.cookie);
-                    const gaCookies = document.cookie
-                        .split(";")
-                        .filter((cookie) => cookie.includes("_ga"));
-                    console.log("GA-specific cookies:", gaCookies);
+                if (realGtag && realGtag !== gtagTemp) {
+                    console.log("Real gtag function is now available");
+
+                    // Initialize with current timestamp
+                    realGtag("js", new Date());
+
+                    // Configure GA with localhost-friendly settings
+                    const isLocalhost =
+                        window.location.hostname === "localhost" ||
+                        window.location.hostname === "127.0.0.1";
+                    const isStaticSite =
+                        window.location.hostname.includes("github.io") ||
+                        window.location.hostname === "fnjoin.com";
+
+                    realGtag("config", GA_MEASUREMENT_ID, {
+                        debug_mode: true,
+                        send_page_view: true,
+                        // For static sites, we need to be more explicit about cookie settings
+                        ...(isLocalhost && {
+                            cookie_domain: "none",
+                            storage: "none",
+                        }),
+                        ...(isStaticSite && {
+                            cookie_domain: "auto",
+                            cookie_expires: 63072000, // 2 years in seconds
+                            anonymize_ip: false,
+                            allow_google_signals: true,
+                            cookie_update: true,
+                        }),
+                    });
+
                     console.log(
-                        "GA Measurement ID being used:",
-                        GA_MEASUREMENT_ID,
+                        "GA configured for",
+                        isLocalhost
+                            ? "localhost"
+                            : isStaticSite
+                              ? "static site"
+                              : "production",
                     );
-                    console.log(
-                        "Global gtag function:",
-                        typeof (window as any).gtag,
-                    );
-                    console.log("DataLayer length:", window.dataLayer?.length);
 
-                    // Additional debugging - check if GA is actually working
-                    if (gaCookies.length === 0) {
-                        console.warn(
-                            "⚠️ No GA cookies found! Possible issues:",
-                        );
-                        console.warn("1. Invalid measurement ID");
-                        console.warn("2. Ad blocker blocking GA");
-                        console.warn("3. Network issues");
-                        console.warn("4. Domain/HTTPS issues");
-                    }
-                }, 2000);
-            }, 1000);
+                    // Send a test page view event after configuration
+                    setTimeout(() => {
+                        console.log("Sending test page view with real gtag...");
+                        realGtag("event", "page_view", {
+                            page_title: document.title,
+                            page_location: window.location.href,
+                        });
+                        console.log("Test page_view event sent via real gtag");
+
+                        // Check for network activity
+                        setTimeout(() => {
+                            console.log(
+                                "Check Network tab for requests to google-analytics.com/g/collect",
+                            );
+                            console.log("Current cookies:", document.cookie);
+                            const gaCookies = document.cookie
+                                .split(";")
+                                .filter((cookie) => cookie.includes("_ga"));
+                            console.log("GA-specific cookies:", gaCookies);
+                        }, 2000);
+                    }, 1000);
+                } else {
+                    console.log("Waiting for real gtag function...");
+                    setTimeout(waitForGtag, 100);
+                }
+            };
+
+            // Start waiting for the real gtag function
+            waitForGtag();
         };
 
         script.onerror = () => {
