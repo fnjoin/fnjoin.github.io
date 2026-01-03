@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import HeaderButton from "./conditiononpathnamebutton";
+import RSSIcon from "./rss-icon";
 import { PageRepository } from "@/lib/repository";
 
 // more nav options https://flowbite.com/docs/components/navbar/
@@ -15,7 +16,8 @@ const Header = () => {
                         Join::Function
                     </Link>
                 </h2>
-                <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+                <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse items-center">
+                    <RSSIcon />
                     {pages
                         .filter((p) =>
                             p.content_flags?.includes("top-nav-call-to-action"),

@@ -1,6 +1,7 @@
 import React from "react";
 import Container from "@/app/_components/container";
 import CookieSettingsLink from "@/components/cookie-settings-link";
+import RSSIcon from "@/app/_components/rss-icon";
 
 export function Footer() {
     const currentYear = new Date().getFullYear();
@@ -22,7 +23,8 @@ export function Footer() {
                         Views and opinions expressed by the authors are solely
                         their own and are not the views of their employers.
                     </div>
-                    <div className="flex justify-center lg:justify-end lg:pl-4 mt-4 lg:mt-0">
+                    <div className="flex justify-center lg:justify-end lg:pl-4 mt-4 lg:mt-0 space-x-4">
+                        <RSSIcon />
                         <CookieSettingsLink />
                     </div>
                 </div>
