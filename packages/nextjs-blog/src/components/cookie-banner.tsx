@@ -121,9 +121,7 @@ export default function CookieBanner() {
         gtag("js", new Date());
 
         // Step 3: Configure GA
-        gtag("config", GA_MEASUREMENT_ID, {
-            debug_mode: true,
-        });
+        gtag("config", GA_MEASUREMENT_ID);
 
         console.log("Consent updated and GA configured");
 
@@ -256,12 +254,14 @@ export default function CookieBanner() {
                                 <button
                                     onClick={handleReject}
                                     className="px-3 py-1 text-xs border border-gray-600 rounded hover:bg-gray-700"
+                                    id="reject-all-cookies"
                                 >
                                     Reject
                                 </button>
                                 <button
                                     onClick={handleAccept}
                                     className="px-3 py-1 text-xs bg-blue-600 rounded hover:bg-blue-700"
+                                    id="accept-all-cookies"
                                 >
                                     Accept
                                 </button>
