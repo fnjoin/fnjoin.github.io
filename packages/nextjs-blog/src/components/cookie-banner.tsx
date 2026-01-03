@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 
+const GA_MEASUREMENT_ID = "G-ZPSKLMVM2V";
+
 // A/B test variants
 const BANNER_VARIANTS = {
     A: {
@@ -78,6 +80,11 @@ export default function CookieBanner() {
             window.dataLayer.push(args);
         }
         (window as any).gtag = gtag;
+        // Step 2: Initialize gtag with timestamp
+        gtag("js", new Date());
+
+        // Step 3: Configure GA
+        gtag("config", GA_MEASUREMENT_ID);
 
         // Step 2: Set default consent state (this BLOCKS the Google tag from loading)
         gtag("consent", "default", {
@@ -101,7 +108,6 @@ export default function CookieBanner() {
             "User granted consent - now loading Google Analytics script",
         );
 
-        const GA_MEASUREMENT_ID = "G-ZPSKLMVM2V";
         const gtag = (window as any).gtag;
 
         if (!gtag) {
@@ -116,12 +122,6 @@ export default function CookieBanner() {
             ad_storage: "granted",
             analytics_storage: "granted",
         });
-
-        // Step 2: Initialize gtag with timestamp
-        gtag("js", new Date());
-
-        // Step 3: Configure GA
-        gtag("config", GA_MEASUREMENT_ID);
 
         console.log("Consent updated and GA configured");
 
