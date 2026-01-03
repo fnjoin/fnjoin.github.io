@@ -19,9 +19,8 @@ import { remarkMermaid } from "@/lib/remark-mermaid";
 const projectRoot = process.cwd();
 
 // Note!! Headings are set in markdown-styles.module.css
-const gridStyle = ""; // "col-start-4 col-end-10 col-span-7";
+const gridStyle = markdownStyles["normal-grid-span"];
 const marginStyle = ""; // "md:col-start-11 md:col-end-13 md:col-span-3";
-const extraWideStyle = ""; // "md:col-start-2 md:col-end-10 md:col-span-10";
 
 export function getMarkdown(): MyPost {
     const fullPath = path.join(projectRoot, `src/app/hellomarkdown/file.md`);
@@ -80,9 +79,7 @@ export function Tags({ tags }: TagProps) {
 
 export function InlineCallout({ children }: any) {
     return (
-        <div
-            className={`col-span-12 col-start-1 col-end-13 ${extraWideStyle} place-content-center`}
-        >
+        <div className={`${gridStyle} place-content-center`}>
             <div className="m-5 text-lg">{children}</div>
         </div>
     );
@@ -107,7 +104,7 @@ export function Author(props: AuthorProps) {
     );
     // console.log("markdown styles", markdownStyles);
     return (
-        <div className={markdownStyles.author}>
+        <div className={`${markdownStyles.author} ${gridStyle}`}>
             <Image
                 src={props.picture}
                 width={size.width}
@@ -132,7 +129,11 @@ export function Heading1({ children }: any) {
     if (typeof children === "string") {
         id = children.toLowerCase().replaceAll(" ", "-");
     }
-    return <h1 id={id}>{children}</h1>;
+    return (
+        <h1 id={id} className={markdownStyles["normal-grid-span"]}>
+            {children}
+        </h1>
+    );
 }
 
 export function Heading2({ children }: any) {
@@ -142,7 +143,11 @@ export function Heading2({ children }: any) {
         id = children.toLowerCase().replaceAll(" ", "-");
     }
     // children.map((x: string) => x.toLowerCase().replaceAll(" ", "-"));
-    return <h2 id={id}>{children}</h2>;
+    return (
+        <h2 id={id} className={markdownStyles["normal-grid-span"]}>
+            {children}
+        </h2>
+    );
 }
 
 export interface ImageWithinFigureProps {
@@ -317,19 +322,27 @@ export function FullBleedImage({
     );
 }
 
+export function WideTable({ children }: any) {
+    return (
+        <div className={markdownStyles["wide-table-container"]}>{children}</div>
+    );
+}
+
 export function TocFromMarkdown({ markdown }: { markdown: string }) {
     return (
-        <ReactMarkdown
-            remarkPlugins={[
-                remarkParse,
-                remarkDirective,
-                myRemarkPlugin,
-                remarkMermaid,
-                extractToc,
-            ]}
-        >
-            {markdown}
-        </ReactMarkdown>
+        <div className={gridStyle}>
+            <ReactMarkdown
+                remarkPlugins={[
+                    remarkParse,
+                    remarkDirective,
+                    myRemarkPlugin,
+                    remarkMermaid,
+                    extractToc,
+                ]}
+            >
+                {markdown}
+            </ReactMarkdown>
+        </div>
     );
 }
 
@@ -438,6 +451,9 @@ export function ArticleBodyFromMarkdown({ art }: { art: MyPost }) {
                     }
                     if (node?.properties["data-element"] === "margin-note") {
                         return <MarginNote {...rest} />;
+                    }
+                    if (node?.properties["data-element"] === "wide-table") {
+                        return <WideTable {...rest} />;
                     }
                     return <div {...rest} />;
                 },

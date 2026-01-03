@@ -98,6 +98,10 @@ export function myRemarkPlugin() {
                     data.hProperties["data-element"] = "margin-note";
                     data.hName = "div";
                 }
+                if (hast.tagName === "wide-table") {
+                    data.hProperties["data-element"] = "wide-table";
+                    data.hName = "div";
+                }
                 if (hast.tagName === "figure-fence") {
                     data.hProperties["data-element"] = "figure-fence";
                     data.hProperties.refnum = refsByType.get(

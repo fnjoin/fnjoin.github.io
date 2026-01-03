@@ -2,20 +2,44 @@
     @apply prose max-w-none grid grid-cols-1 md:grid-cols-12 grid-flow-row gap-0;
 }
 
-.article div,
-.article pre,
-.article ul,
-.article ol,
-.article h1,
-.article h2,
-.article h3,
-.article h4,
-.article h5,
-.article blockquote,
-.article table,
-.article section,
-.article figure {
+/* Normal grid span for most content elements */
+.normal-grid-span {
     @apply col-start-4 col-end-10 col-span-6;
+}
+
+/* Wide table container for large data tables */
+.wide-table-container {
+    @apply col-start-1 col-end-13 col-span-12;
+    @apply bg-gray-50 border border-gray-200 rounded-lg;
+    @apply p-4 my-8;
+    @apply overflow-x-auto;
+    /* Constrain width on large screens, allow scroll on small screens */
+    max-width: 100vw;
+}
+
+.wide-table-container table {
+    @apply w-full;
+    @apply text-sm;
+    @apply border-collapse border-spacing-0;
+    /* Override any grid positioning from normal table styles */
+    grid-column: unset !important;
+    /* Remove min-w-max to allow table to fit container better */
+    min-width: 800px; /* Minimum width for readability */
+}
+
+.wide-table-container th {
+    @apply bg-gray-100 font-semibold text-left;
+    @apply px-3 py-2 border-b border-gray-300;
+    @apply sticky top-0 z-10;
+}
+
+.wide-table-container td {
+    @apply px-3 py-2 border-b border-gray-200;
+    @apply align-top;
+}
+
+.wide-table-container tr:hover {
+    @apply bg-gray-100;
 }
 
 /* Mermaid diagrams should span wider and not inherit pre styles */
@@ -41,8 +65,19 @@
 .article h2,
 .article h3,
 .article h4,
-.article h5 {
+.article h5,
+.article h6 {
     @apply mt-4 mr-2 mb-2;
+}
+
+/* Apply normal grid span to elements that aren't handled by components */
+.article h3,
+.article h4,
+.article h5,
+.article h6,
+.article figure,
+.article :global(.text-center) {
+    @apply col-start-4 col-end-10 col-span-6;
 }
 
 .author {
@@ -50,7 +85,7 @@
 }
 
 .author div {
-    @apply col-start-2 col-span-8;
+    @apply col-start-2 col-span-7;
 }
 
 .author img {
