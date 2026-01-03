@@ -6,6 +6,7 @@ import Copyright from "@/app/_components/copy";
 import { PostBody } from "@/app/_components/post-body";
 import { ReadingStats } from "@/app/_components/reading-stats";
 import ScrollTracker from "@/app/_components/scrolltracking";
+import { getFirstNWordsFromMarkdown } from "@/lib/markdown-utils";
 import {
     Article,
     Author,
@@ -73,7 +74,8 @@ export function generateMetadata({ params }: Params): Metadata {
     const title = `${post.title} | Join Function`;
 
     // if this is empty, no description is included
-    const description = post.excerpt;
+    const description =
+        post.excerpt || getFirstNWordsFromMarkdown(post.content, 30) + "...";
 
     return {
         metadataBase: new URL("https://fnjoin.com"),

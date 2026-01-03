@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import React from "react";
 import Header from "../../_components/header";
 import { PostBody } from "@/app/_components/post-body";
+import { getFirstNWordsFromMarkdown } from "@/lib/markdown-utils";
 import {
     Article,
     Author,
@@ -62,7 +63,9 @@ export function generateMetadata({ params }: Params): Metadata {
         return {
             metadataBase: new URL("https://fnjoin.com"),
             title,
-            description: post.excerpt,
+            description:
+                post.excerpt ||
+                getFirstNWordsFromMarkdown(post.content, 30) + "...",
             alternates: {
                 canonical: `https://fnjoin.com/${post.slug}/`,
             },
@@ -82,7 +85,9 @@ export function generateMetadata({ params }: Params): Metadata {
     return {
         metadataBase: new URL("https://fnjoin.com"),
         title,
-        description: post.excerpt,
+        description:
+            post.excerpt ||
+            getFirstNWordsFromMarkdown(post.content, 30) + "...",
         alternates: {
             canonical: `https://fnjoin.com/${post.slug}/`,
         },
