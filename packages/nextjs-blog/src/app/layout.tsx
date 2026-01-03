@@ -89,6 +89,32 @@ export default function RootLayout({
                     type="application/rss+xml"
                     title="fn:join"
                 />
+
+                {/* Google Analytics Consent Mode v2 - Basic Consent Mode */}
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                            window.dataLayer = window.dataLayer || [];
+                            function gtag() { dataLayer.push(arguments); }
+                            
+                            // Set default consent state (denies all until user grants consent)
+                            gtag('consent', 'default', {
+                                'ad_user_data': 'denied',
+                                'ad_personalization': 'denied', 
+                                'ad_storage': 'denied',
+                                'analytics_storage': 'denied',
+                                'wait_for_update': 500,
+                            });
+                            
+                            // Initialize gtag with timestamp
+                            gtag('js', new Date());
+                            
+                            // Configure Google Analytics (this won't load the script until consent is granted)
+                            gtag('config', 'G-ZPSKLMVM2V');
+                            
+                        `,
+                    }}
+                />
             </head>
             <body className={inter.className}>
                 <div className="min-h-screen">{children}</div>

@@ -37,9 +37,6 @@ export default function CookieBanner() {
         // Only run on client side
         if (typeof window === "undefined") return;
 
-        // Initialize Basic Consent Mode (NO script loading yet)
-        initializeBasicConsentMode();
-
         // Assign A/B test variant (50/50 split)
         const existingVariant = localStorage.getItem("cookie-banner-variant");
         if (
@@ -63,46 +60,6 @@ export default function CookieBanner() {
         }
     }, []);
 
-    const initializeBasicConsentMode = () => {
-        // Check if already initialized
-        if ((window as any).gtagInitialized) {
-            console.log("Basic Consent Mode already initialized");
-            return;
-        }
-
-        console.log(
-            "Setting up Basic Consent Mode - NO script loading until consent",
-        );
-
-        // Step 1: Set up dataLayer and gtag function BEFORE consent banner
-        window.dataLayer = window.dataLayer || [];
-        function gtag(...args: any[]) {
-            window.dataLayer.push(args);
-        }
-        (window as any).gtag = gtag;
-        // Step 2: Initialize gtag with timestamp
-        gtag("js", new Date());
-
-        // Step 3: Configure GA
-        gtag("config", GA_MEASUREMENT_ID);
-
-        // Step 2: Set default consent state (this BLOCKS the Google tag from loading)
-        gtag("consent", "default", {
-            ad_user_data: "denied",
-            ad_personalization: "denied",
-            ad_storage: "denied",
-            analytics_storage: "denied",
-            wait_for_update: 500,
-        });
-
-        console.log(
-            "Consent defaults set - Google tag will NOT load until consent granted",
-        );
-
-        // Mark as initialized but DO NOT load script
-        (window as any).gtagInitialized = true;
-    };
-
     const loadGoogleAnalyticsAfterConsent = () => {
         console.log(
             "User granted consent - now loading Google Analytics script",
@@ -111,7 +68,9 @@ export default function CookieBanner() {
         const gtag = (window as any).gtag;
 
         if (!gtag) {
-            console.error("gtag function not available");
+            console.error(
+                "gtag function not available - consent mode not initialized",
+            );
             return;
         }
 
@@ -123,9 +82,9 @@ export default function CookieBanner() {
             analytics_storage: "granted",
         });
 
-        console.log("Consent updated and GA configured");
+        console.log("Consent updated to granted - now loading GA script");
 
-        // Step 4: NOW load the Google Analytics script (Basic Consent Mode)
+        // Step 2: Load the Google Analytics script (Basic Consent Mode)
         const script = document.createElement("script");
         script.async = true;
         script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;

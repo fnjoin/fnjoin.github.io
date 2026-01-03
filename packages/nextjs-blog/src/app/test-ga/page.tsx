@@ -17,7 +17,7 @@ export default function TestGA() {
                 `✅ Sent ${eventName} event at ${new Date().toLocaleTimeString()}`,
             ]);
         } else {
-            const error = `❌ gtag not available - make sure you've accepted cookies`;
+            const error = `❌ gtag not available - make sure you&apos;ve accepted cookies`;
             console.error(error);
             setEventResults((prev) => [...prev, error]);
         }
