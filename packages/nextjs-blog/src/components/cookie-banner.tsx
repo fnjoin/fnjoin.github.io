@@ -35,6 +35,9 @@ export default function CookieBanner() {
         // Only run on client side
         if (typeof window === "undefined") return;
 
+        // Initialize Basic Consent Mode (NO script loading yet)
+        initializeBasicConsentMode();
+
         // Assign A/B test variant (50/50 split)
         const existingVariant = localStorage.getItem("cookie-banner-variant");
         if (
@@ -53,22 +56,121 @@ export default function CookieBanner() {
         if (!consent) {
             setShowBanner(true);
         } else if (consent === "accepted") {
-            // Load Google Analytics if consent was given
-            loadGoogleAnalytics();
+            // Load Google Analytics script since consent was previously granted
+            loadGoogleAnalyticsAfterConsent();
         }
     }, []);
+
+    const initializeBasicConsentMode = () => {
+        // Check if already initialized
+        if ((window as any).gtagInitialized) {
+            console.log("Basic Consent Mode already initialized");
+            return;
+        }
+
+        console.log(
+            "Setting up Basic Consent Mode - NO script loading until consent",
+        );
+
+        // Step 1: Set up dataLayer and gtag function BEFORE consent banner
+        window.dataLayer = window.dataLayer || [];
+        function gtag(...args: any[]) {
+            window.dataLayer.push(args);
+        }
+        (window as any).gtag = gtag;
+
+        // Step 2: Set default consent state (this BLOCKS the Google tag from loading)
+        gtag("consent", "default", {
+            ad_user_data: "denied",
+            ad_personalization: "denied",
+            ad_storage: "denied",
+            analytics_storage: "denied",
+            wait_for_update: 500,
+        });
+
+        console.log(
+            "Consent defaults set - Google tag will NOT load until consent granted",
+        );
+
+        // Mark as initialized but DO NOT load script
+        (window as any).gtagInitialized = true;
+    };
+
+    const loadGoogleAnalyticsAfterConsent = () => {
+        console.log(
+            "User granted consent - now loading Google Analytics script",
+        );
+
+        const GA_MEASUREMENT_ID = "G-ZPSKLMVM2V";
+        const gtag = (window as any).gtag;
+
+        if (!gtag) {
+            console.error("gtag function not available");
+            return;
+        }
+
+        // Step 1: Update consent state to granted
+        gtag("consent", "update", {
+            ad_user_data: "granted",
+            ad_personalization: "granted",
+            ad_storage: "granted",
+            analytics_storage: "granted",
+        });
+
+        // Step 2: Initialize gtag with timestamp
+        gtag("js", new Date());
+
+        // Step 3: Configure GA
+        gtag("config", GA_MEASUREMENT_ID, {
+            debug_mode: true,
+        });
+
+        console.log("Consent updated and GA configured");
+
+        // Step 4: NOW load the Google Analytics script (Basic Consent Mode)
+        const script = document.createElement("script");
+        script.async = true;
+        script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+
+        script.onload = () => {
+            console.log(
+                "Google Analytics script loaded successfully after consent",
+            );
+
+            // Send a test event after script loads
+            setTimeout(() => {
+                gtag("event", "consent_granted", {
+                    event_category: "GDPR",
+                    event_label: "user_accepted_cookies",
+                });
+                console.log("Consent granted event sent");
+            }, 500);
+        };
+
+        script.onerror = () => {
+            console.error("Failed to load Google Analytics script");
+        };
+
+        const firstScript = document.getElementsByTagName("script")[0];
+        firstScript.parentNode?.insertBefore(script, firstScript);
+
+        console.log(
+            "Google Analytics script loading after user consent (Basic Consent Mode)",
+        );
+    };
 
     const handleAccept = () => {
         localStorage.setItem("cookie-consent", "accepted");
         setShowBanner(false);
         setShowSettings(false);
 
-        loadGoogleAnalytics();
+        // Load Google Analytics script now that user granted consent
+        loadGoogleAnalyticsAfterConsent();
 
-        // Track acceptance with gtag event (with delay to ensure gtag is loaded)
+        // Track acceptance with gtag event (with delay to ensure script loads)
         setTimeout(() => {
             trackConsentEvent("accept", variant);
-        }, 500);
+        }, 1500);
     };
 
     const handleReject = () => {
@@ -76,10 +178,12 @@ export default function CookieBanner() {
         setShowBanner(false);
         setShowSettings(false);
 
-        // Note: Can't track rejections with gtag since analytics won't be loaded
-        // Could use a different tracking method here if needed
+        // Note: Consent remains denied, no script loading
+        console.log(
+            "User rejected cookies - no Google Analytics script will be loaded",
+        );
 
-        // Clear any existing GA cookies
+        // Clear any existing GA cookies (shouldn't exist but just in case)
         clearGoogleAnalytics();
     };
 
@@ -90,9 +194,10 @@ export default function CookieBanner() {
     const trackConsentEvent = (action: "accept", testVariant: "A" | "B") => {
         console.log("trackConsentEvent called with:", action, testVariant);
 
-        if (typeof window !== "undefined" && window.gtag) {
+        const gtag = (window as any).gtag;
+        if (gtag) {
             console.log("Sending consent event to GA...");
-            window.gtag("event", "cookie_consent", {
+            gtag("event", "cookie_consent", {
                 event_category: "GDPR",
                 event_label: `variant_${testVariant}`,
                 action: action,
@@ -101,7 +206,7 @@ export default function CookieBanner() {
             console.log("Consent event sent:", testVariant);
 
             // Also send a simple test event
-            window.gtag("event", "test_event", {
+            gtag("event", "test_event", {
                 event_category: "Debug",
                 event_label: "cookie_banner_test",
             });
@@ -119,126 +224,6 @@ export default function CookieBanner() {
             "_ga_G-ZPSKLMVM2V=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         document.cookie =
             "_gid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    };
-
-    const loadGoogleAnalytics = () => {
-        const GA_MEASUREMENT_ID = "G-ZPSKLMVM2V";
-
-        // Check if gtag is already loaded to prevent duplicates
-        if ((window as any).gtag) {
-            console.log("Google Analytics already loaded");
-            return;
-        }
-
-        // Initialize dataLayer first
-        window.dataLayer = window.dataLayer || [];
-
-        // DON'T create our own gtag function - let GA script create the real one
-        // Just create a temporary one that will be replaced
-        function gtagTemp(...args: any[]) {
-            window.dataLayer.push(args);
-        }
-
-        // Only set gtag if it doesn't exist yet
-        if (!(window as any).gtag) {
-            (window as any).gtag = gtagTemp;
-        }
-
-        // Load the Google Analytics script FIRST
-        const script = document.createElement("script");
-        script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-        script.async = true;
-
-        script.onload = () => {
-            console.log("Google Analytics script loaded successfully");
-
-            // Wait for the real gtag function to be available
-            const waitForGtag = () => {
-                // Check if the real gtag function is now available
-                const realGtag = (window as any).gtag;
-
-                if (realGtag && realGtag !== gtagTemp) {
-                    console.log("Real gtag function is now available");
-
-                    // Initialize with current timestamp
-                    realGtag("js", new Date());
-
-                    // Configure GA with localhost-friendly settings
-                    const isLocalhost =
-                        window.location.hostname === "localhost" ||
-                        window.location.hostname === "127.0.0.1";
-                    const isStaticSite =
-                        window.location.hostname.includes("github.io") ||
-                        window.location.hostname === "fnjoin.com";
-
-                    realGtag("config", GA_MEASUREMENT_ID, {
-                        debug_mode: true,
-                        send_page_view: true,
-                        // For static sites, we need to be more explicit about cookie settings
-                        ...(isLocalhost && {
-                            cookie_domain: "none",
-                            storage: "none",
-                        }),
-                        ...(isStaticSite && {
-                            cookie_domain: "auto",
-                            cookie_expires: 63072000, // 2 years in seconds
-                            anonymize_ip: false,
-                            allow_google_signals: true,
-                            cookie_update: true,
-                        }),
-                    });
-
-                    console.log(
-                        "GA configured for",
-                        isLocalhost
-                            ? "localhost"
-                            : isStaticSite
-                              ? "static site"
-                              : "production",
-                    );
-
-                    // Send a test page view event after configuration
-                    setTimeout(() => {
-                        console.log("Sending test page view with real gtag...");
-                        realGtag("event", "page_view", {
-                            page_title: document.title,
-                            page_location: window.location.href,
-                        });
-                        console.log("Test page_view event sent via real gtag");
-
-                        // Check for network activity
-                        setTimeout(() => {
-                            console.log(
-                                "Check Network tab for requests to google-analytics.com/g/collect",
-                            );
-                            console.log("Current cookies:", document.cookie);
-                            const gaCookies = document.cookie
-                                .split(";")
-                                .filter((cookie) => cookie.includes("_ga"));
-                            console.log("GA-specific cookies:", gaCookies);
-                        }, 2000);
-                    }, 1000);
-                } else {
-                    console.log("Waiting for real gtag function...");
-                    setTimeout(waitForGtag, 100);
-                }
-            };
-
-            // Start waiting for the real gtag function
-            waitForGtag();
-        };
-
-        script.onerror = () => {
-            console.error("Failed to load Google Analytics script");
-        };
-
-        document.head.appendChild(script);
-
-        console.log(
-            "Google Analytics initialization complete with ID:",
-            GA_MEASUREMENT_ID,
-        );
-        console.log("dataLayer:", window.dataLayer);
     };
 
     // Settings panel for consent withdrawal
