@@ -100,23 +100,32 @@ export default function RootLayout({
                             window.dataLayer = window.dataLayer || [];
                             function gtag() { dataLayer.push(arguments); }
                             
-                            // Check localStorage for existing consent before setting defaults
-                            let consentState = 'denied';
+                            // Check localStorage for existing granular consent before setting defaults
+                            let consentDefaults = {
+                                'ad_user_data': 'denied',
+                                'ad_personalization': 'denied', 
+                                'ad_storage': 'denied',
+                                'analytics_storage': 'denied'
+                            };
+                            
                             try {
-                                const storedConsent = localStorage.getItem('cookie-consent');
-                                if (storedConsent === 'accepted') {
-                                    consentState = 'granted';
+                                const storedConsent = localStorage.getItem('gdpr-consent-state');
+                                if (storedConsent) {
+                                    const parsed = JSON.parse(storedConsent);
+                                    consentDefaults = {
+                                        'ad_user_data': parsed.ad_user_data ? 'granted' : 'denied',
+                                        'ad_personalization': parsed.ad_personalization ? 'granted' : 'denied',
+                                        'ad_storage': parsed.ad_storage ? 'granted' : 'denied',
+                                        'analytics_storage': parsed.analytics_storage ? 'granted' : 'denied'
+                                    };
                                 }
                             } catch (e) {
-                                // localStorage not available (SSR), use default 'denied'
+                                // localStorage not available (SSR) or parsing error, use defaults
                             }
                             
                             // Set default consent state based on stored preferences
                             gtag('consent', 'default', {
-                                'ad_user_data': consentState,
-                                'ad_personalization': consentState, 
-                                'ad_storage': consentState,
-                                'analytics_storage': consentState,
+                                ...consentDefaults,
                                 'wait_for_update': 500,
                             });
                         `,
