@@ -1,7 +1,7 @@
 import React from "react";
 import Container from "@/app/_components/container";
-import CookieSettingsLink from "@/components/cookie-settings-link";
 import RSSIcon from "@/app/_components/rss-icon";
+import CookieSettingsLink from "@/components/cookie-settings-link";
 
 export function Footer() {
     const currentYear = new Date().getFullYear();

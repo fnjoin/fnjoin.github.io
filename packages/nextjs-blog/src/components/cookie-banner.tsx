@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from "react";
 
-const GA_MEASUREMENT_ID = "G-ZPSKLMVM2V";
-
 // A/B test variants
 const BANNER_VARIANTS = {
     A: {
@@ -55,15 +53,14 @@ export default function CookieBanner() {
         if (!consent) {
             setShowBanner(true);
         } else if (consent === "accepted") {
-            // Load Google Analytics script since consent was previously granted
-            loadGoogleAnalyticsAfterConsent();
+            // Update consent state since GA script is already loaded (Advanced Mode)
+            updateConsentToGranted();
         }
+        // If consent === "rejected", consent remains denied (default from layout.tsx)
     }, []);
 
-    const loadGoogleAnalyticsAfterConsent = () => {
-        console.log(
-            "User granted consent - now loading Google Analytics script",
-        );
+    const updateConsentToGranted = () => {
+        console.log("Updating consent to granted (Advanced Consent Mode)");
 
         const gtag = (window as any).gtag;
 
@@ -74,7 +71,7 @@ export default function CookieBanner() {
             return;
         }
 
-        // Step 1: Update consent state to granted
+        // Update consent state to granted (GA script already loaded)
         gtag("consent", "update", {
             ad_user_data: "granted",
             ad_personalization: "granted",
@@ -82,38 +79,39 @@ export default function CookieBanner() {
             analytics_storage: "granted",
         });
 
-        console.log("Consent updated to granted - now loading GA script");
+        console.log("Consent updated to granted in Advanced Mode");
 
-        // Step 2: Load the Google Analytics script (Basic Consent Mode)
-        const script = document.createElement("script");
-        script.async = true;
-        script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+        // Send a test event after consent update
+        setTimeout(() => {
+            gtag("event", "consent_granted", {
+                event_category: "GDPR",
+                event_label: "user_accepted_cookies",
+            });
+            console.log("Consent granted event sent");
+        }, 500);
+    };
 
-        script.onload = () => {
-            console.log(
-                "Google Analytics script loaded successfully after consent",
+    const updateConsentToDenied = () => {
+        console.log("Updating consent to denied (Advanced Consent Mode)");
+
+        const gtag = (window as any).gtag;
+
+        if (!gtag) {
+            console.error(
+                "gtag function not available - consent mode not initialized",
             );
+            return;
+        }
 
-            // Send a test event after script loads
-            setTimeout(() => {
-                gtag("event", "consent_granted", {
-                    event_category: "GDPR",
-                    event_label: "user_accepted_cookies",
-                });
-                console.log("Consent granted event sent");
-            }, 500);
-        };
+        // Update consent state to denied
+        gtag("consent", "update", {
+            ad_user_data: "denied",
+            ad_personalization: "denied",
+            ad_storage: "denied",
+            analytics_storage: "denied",
+        });
 
-        script.onerror = () => {
-            console.error("Failed to load Google Analytics script");
-        };
-
-        const firstScript = document.getElementsByTagName("script")[0];
-        firstScript.parentNode?.insertBefore(script, firstScript);
-
-        console.log(
-            "Google Analytics script loading after user consent (Basic Consent Mode)",
-        );
+        console.log("Consent updated to denied in Advanced Mode");
     };
 
     const handleAccept = () => {
@@ -121,13 +119,13 @@ export default function CookieBanner() {
         setShowBanner(false);
         setShowSettings(false);
 
-        // Load Google Analytics script now that user granted consent
-        loadGoogleAnalyticsAfterConsent();
+        // Update consent state (GA script already loaded in Advanced Mode)
+        updateConsentToGranted();
 
-        // Track acceptance with gtag event (with delay to ensure script loads)
+        // Track acceptance with gtag event (with delay to ensure consent update processes)
         setTimeout(() => {
             trackConsentEvent("accept", variant);
-        }, 1500);
+        }, 1000);
     };
 
     const handleReject = () => {
@@ -135,12 +133,14 @@ export default function CookieBanner() {
         setShowBanner(false);
         setShowSettings(false);
 
-        // Note: Consent remains denied, no script loading
+        // Update consent state to denied (GA script loaded but won't collect data)
+        updateConsentToDenied();
+
         console.log(
-            "User rejected cookies - no Google Analytics script will be loaded",
+            "User rejected cookies - Google Analytics will not collect data (Advanced Mode)",
         );
 
-        // Clear any existing GA cookies (shouldn't exist but just in case)
+        // Clear any existing GA cookies
         clearGoogleAnalytics();
     };
 

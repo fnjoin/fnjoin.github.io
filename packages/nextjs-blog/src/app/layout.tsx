@@ -7,6 +7,8 @@ import GADebug from "@/components/ga-debug";
 
 import "./globals.css";
 
+const GA_MEASUREMENT_ID = "G-ZPSKLMVM2V";
+
 const inter = Inter({ subsets: ["latin"] });
 
 const title = "Join Function";
@@ -90,28 +92,54 @@ export default function RootLayout({
                     title="fn:join"
                 />
 
-                {/* Google Analytics Consent Mode v2 - Basic Consent Mode */}
+                {/* Google Analytics Consent Mode v2 - Advanced Consent Mode */}
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                            // Define dataLayer and gtag function
+                            window.dataLayer = window.dataLayer || [];
+                            function gtag() { dataLayer.push(arguments); }
+                            
+                            // Check localStorage for existing consent before setting defaults
+                            let consentState = 'denied';
+                            try {
+                                const storedConsent = localStorage.getItem('cookie-consent');
+                                if (storedConsent === 'accepted') {
+                                    consentState = 'granted';
+                                }
+                            } catch (e) {
+                                // localStorage not available (SSR), use default 'denied'
+                            }
+                            
+                            // Set default consent state based on stored preferences
+                            gtag('consent', 'default', {
+                                'ad_user_data': consentState,
+                                'ad_personalization': consentState, 
+                                'ad_storage': consentState,
+                                'analytics_storage': consentState,
+                                'wait_for_update': 500,
+                            });
+                        `,
+                    }}
+                />
+
+                {/* Google tag (gtag.js) - Load immediately in advanced mode */}
+                <script
+                    async
+                    src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+                />
+
                 <script
                     dangerouslySetInnerHTML={{
                         __html: `
                             window.dataLayer = window.dataLayer || [];
                             function gtag() { dataLayer.push(arguments); }
                             
-                            // Set default consent state (denies all until user grants consent)
-                            gtag('consent', 'default', {
-                                'ad_user_data': 'denied',
-                                'ad_personalization': 'denied', 
-                                'ad_storage': 'denied',
-                                'analytics_storage': 'denied',
-                                'wait_for_update': 500,
-                            });
-                            
                             // Initialize gtag with timestamp
                             gtag('js', new Date());
                             
-                            // Configure Google Analytics (this won't load the script until consent is granted)
-                            gtag('config', 'G-ZPSKLMVM2V');
-                            
+                            // Configure Google Analytics
+                            gtag('config', '${GA_MEASUREMENT_ID}');
                         `,
                     }}
                 />
