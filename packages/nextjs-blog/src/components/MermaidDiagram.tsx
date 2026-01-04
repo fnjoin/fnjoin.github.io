@@ -18,6 +18,36 @@ export function MermaidDiagram({ chart, className = "" }: MermaidDiagramProps) {
 
     useEffect(() => {
         if (!mermaidInitialized) {
+            // Register icon packs for AWS and other service icons
+            mermaid.registerIconPacks([
+                {
+                    name: "logos",
+                    loader: () =>
+                        fetch(
+                            "https://unpkg.com/@iconify-json/logos@1/icons.json",
+                        )
+                            .then((res) => res.json())
+                            .catch(() => {
+                                console.warn("Failed to load logos icon pack");
+                                return { icons: {} };
+                            }),
+                },
+                {
+                    name: "simple-icons",
+                    loader: () =>
+                        fetch(
+                            "https://unpkg.com/@iconify-json/simple-icons@1/icons.json",
+                        )
+                            .then((res) => res.json())
+                            .catch(() => {
+                                console.warn(
+                                    "Failed to load simple-icons pack",
+                                );
+                                return { icons: {} };
+                            }),
+                },
+            ]);
+
             mermaid.initialize({
                 startOnLoad: false,
                 theme: "default",

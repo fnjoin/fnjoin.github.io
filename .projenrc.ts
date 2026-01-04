@@ -90,9 +90,12 @@ const nextjsBlog = new NextJsBlogTypescriptAppProject({
         "xml-js",
         "strip-markdown",
         "@next/third-parties", // google analytics
-        "mermaid@^10.6.1",
+        "mermaid@^11.4.0",
         "lucide-react@latest",
         "framer-motion@latest",
+        // iconify icon packs for mermaid diagrams
+        "@iconify-json/logos@latest",
+        "@iconify-json/simple-icons@latest",
         // shadcn/ui dependencies
         "@radix-ui/react-switch@latest",
         "class-variance-authority@latest",

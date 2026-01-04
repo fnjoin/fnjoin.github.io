@@ -147,6 +147,16 @@
       "type": "build"
     },
     {
+      "name": "@iconify-json/logos",
+      "version": "latest",
+      "type": "runtime"
+    },
+    {
+      "name": "@iconify-json/simple-icons",
+      "version": "latest",
+      "type": "runtime"
+    },
+    {
       "name": "@next/third-parties",
       "type": "runtime"
     },
@@ -243,7 +253,7 @@
     },
     {
       "name": "mermaid",
-      "version": "^10.6.1",
+      "version": "^11.4.0",
       "type": "runtime"
     },
     {
