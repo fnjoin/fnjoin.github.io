@@ -129,6 +129,11 @@
       "type": "build"
     },
     {
+      "name": "tailwindcss-animate",
+      "version": "latest",
+      "type": "build"
+    },
+    {
       "name": "tailwindcss",
       "version": "^3.3.0",
       "type": "build"
@@ -146,6 +151,11 @@
       "type": "runtime"
     },
     {
+      "name": "@radix-ui/react-switch",
+      "version": "latest",
+      "type": "runtime"
+    },
+    {
       "name": "@tailwindcss/typography",
       "version": "latest",
       "type": "runtime"
@@ -155,8 +165,18 @@
       "type": "runtime"
     },
     {
+      "name": "class-variance-authority",
+      "version": "latest",
+      "type": "runtime"
+    },
+    {
       "name": "classnames",
       "version": "^2.5.1",
+      "type": "runtime"
+    },
+    {
+      "name": "clsx",
+      "version": "latest",
       "type": "runtime"
     },
     {
@@ -312,6 +332,16 @@
     },
     {
       "name": "strip-markdown",
+      "type": "runtime"
+    },
+    {
+      "name": "tailwind-merge",
+      "version": "latest",
+      "type": "runtime"
+    },
+    {
+      "name": "tailwindcss-animate",
+      "version": "latest",
       "type": "runtime"
     },
     {

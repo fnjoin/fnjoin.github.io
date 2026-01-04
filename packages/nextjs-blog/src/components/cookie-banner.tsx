@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Switch } from "@/components/ui/switch";
 
 // A/B test variants
 const BANNER_VARIANTS = {
@@ -30,6 +31,7 @@ export default function CookieBanner() {
     const [showBanner, setShowBanner] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
     const [variant, setVariant] = useState<"A" | "B">("A");
+    const [analyticsEnabled, setAnalyticsEnabled] = useState(false);
 
     useEffect(() => {
         // Only run on client side
@@ -53,8 +55,11 @@ export default function CookieBanner() {
         if (!consent) {
             setShowBanner(true);
         } else if (consent === "accepted") {
+            setAnalyticsEnabled(true);
             // Update consent state since GA script is already loaded (Advanced Mode)
             updateConsentToGranted();
+        } else {
+            setAnalyticsEnabled(false);
         }
         // If consent === "rejected", consent remains denied (default from layout.tsx)
     }, []);
@@ -114,34 +119,41 @@ export default function CookieBanner() {
         console.log("Consent updated to denied in Advanced Mode");
     };
 
-    const handleAccept = () => {
-        localStorage.setItem("cookie-consent", "accepted");
-        setShowBanner(false);
-        setShowSettings(false);
+    const handleSwitchChange = (checked: boolean) => {
+        setAnalyticsEnabled(checked);
 
-        // Update consent state (GA script already loaded in Advanced Mode)
-        updateConsentToGranted();
+        if (checked) {
+            localStorage.setItem("cookie-consent", "accepted");
+            updateConsentToGranted();
 
-        // Track acceptance with gtag event (with delay to ensure consent update processes)
-        setTimeout(() => {
-            trackConsentEvent("accept", variant);
-        }, 1000);
+            // Track acceptance with gtag event
+            setTimeout(() => {
+                trackConsentEvent("accept", variant);
+            }, 1000);
+        } else {
+            localStorage.setItem("cookie-consent", "rejected");
+            updateConsentToDenied();
+            clearGoogleAnalytics();
+        }
     };
 
-    const handleReject = () => {
-        localStorage.setItem("cookie-consent", "rejected");
+    const handleAcceptAll = () => {
+        setAnalyticsEnabled(true);
+        handleSwitchChange(true);
         setShowBanner(false);
         setShowSettings(false);
+    };
 
-        // Update consent state to denied (GA script loaded but won't collect data)
-        updateConsentToDenied();
+    const handleRejectAll = () => {
+        setAnalyticsEnabled(false);
+        handleSwitchChange(false);
+        setShowBanner(false);
+        setShowSettings(false);
+    };
 
-        console.log(
-            "User rejected cookies - Google Analytics will not collect data (Advanced Mode)",
-        );
-
-        // Clear any existing GA cookies
-        clearGoogleAnalytics();
+    const handleSaveSettings = () => {
+        setShowBanner(false);
+        setShowSettings(false);
     };
 
     const handleShowSettings = () => {
@@ -200,30 +212,21 @@ export default function CookieBanner() {
                     </div>
 
                     <div className="bg-gray-800 p-4 rounded mb-4">
-                        <div className="flex justify-between items-start">
-                            <div>
-                                <h4 className="font-medium">
+                        <div className="flex justify-between items-center">
+                            <div className="flex-1">
+                                <h4 className="font-medium mb-1">
                                     Analytics Cookies
                                 </h4>
-                                <p className="text-sm text-gray-300 mt-1">
+                                <p className="text-sm text-gray-300">
                                     {currentVariant.cookieDescription}
                                 </p>
                             </div>
-                            <div className="ml-4 flex gap-2">
-                                <button
-                                    onClick={handleReject}
-                                    className="px-3 py-1 text-xs border border-gray-600 rounded hover:bg-gray-700"
-                                    id="reject-all-cookies"
-                                >
-                                    Reject
-                                </button>
-                                <button
-                                    onClick={handleAccept}
-                                    className="px-3 py-1 text-xs bg-blue-600 rounded hover:bg-blue-700"
-                                    id="accept-all-cookies"
-                                >
-                                    Accept
-                                </button>
+                            <div className="ml-4 flex items-center">
+                                <Switch
+                                    checked={analyticsEnabled}
+                                    onCheckedChange={handleSwitchChange}
+                                    className="data-[state=checked]:bg-blue-600 data-[state=unchecked]:bg-gray-600"
+                                />
                             </div>
                         </div>
                     </div>
@@ -237,16 +240,16 @@ export default function CookieBanner() {
                         </button>
                         <div className="flex gap-3">
                             <button
-                                onClick={handleReject}
+                                onClick={handleRejectAll}
                                 className="px-4 py-2 text-sm border border-gray-600 rounded hover:bg-gray-800"
                             >
                                 Reject All
                             </button>
                             <button
-                                onClick={handleAccept}
+                                onClick={handleSaveSettings}
                                 className="px-4 py-2 text-sm bg-blue-600 rounded hover:bg-blue-700"
                             >
-                                Accept All
+                                Save Settings
                             </button>
                         </div>
                     </div>
@@ -275,13 +278,13 @@ export default function CookieBanner() {
                 </div>
                 <div className="flex gap-3 flex-shrink-0">
                     <button
-                        onClick={handleReject}
+                        onClick={handleRejectAll}
                         className="px-4 py-2 text-sm border border-gray-600 rounded hover:bg-gray-800 transition-colors"
                     >
                         Decline
                     </button>
                     <button
-                        onClick={handleAccept}
+                        onClick={handleAcceptAll}
                         className="px-4 py-2 text-sm bg-blue-600 rounded hover:bg-blue-700 transition-colors"
                     >
                         Accept

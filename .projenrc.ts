@@ -93,6 +93,13 @@ const nextjsBlog = new NextJsBlogTypescriptAppProject({
         "mermaid@^10.6.1",
         "lucide-react@latest",
         "framer-motion@latest",
+        // shadcn/ui dependencies
+        "@radix-ui/react-switch@latest",
+        "class-variance-authority@latest",
+        "clsx@latest",
+        "tailwind-merge@latest",
+        "lucide-react@latest",
+        "tailwindcss-animate@latest",
     ],
     devDeps: [
         "critters",
@@ -104,6 +111,7 @@ const nextjsBlog = new NextJsBlogTypescriptAppProject({
         "@types/unist",
         "@types/node",
         "@types/mdast",
+        "tailwindcss-animate@latest",
     ],
 
     sampleCode: true,
