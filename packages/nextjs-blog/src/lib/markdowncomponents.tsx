@@ -276,16 +276,16 @@ export function RefLink(props: RefLinkProps) {
 }
 
 function logMissingFigureNS() {
-    console.warn(
-        `
-Missing ref namespaces in the article frontmatter. Set figurens in your frontmatter
-e.g.:
-figurens:
-    img: Image
-    fig: Figure
-    code: Code Excerpt
-        `.trim(),
-    );
+    // console.warn(
+    //     `
+    // Missing ref namespaces in the article frontmatter. Set figurens in your frontmatter
+    // e.g.:
+    // figurens:
+    //     img: Image
+    //     fig: Figure
+    //     code: Code Excerpt
+    //     `.trim(),
+    // );
 }
 
 export function FullBleedImage({
