@@ -225,12 +225,58 @@ Aside, I wish that my writing/journaling life started much sooner. The stories I
 -   "Behind the scenes" insights
 -   Historical context or backstory
 
+#### Figure-Fence (Preferred for Images)
+
+Use `:::figure-fence` blocks for images within article content that need proper captioning and numbering:
+
+```markdown
+:::figure-fence{id="unique:identifier" title="Figure Title" caption="Descriptive caption explaining what the image shows and why it matters."}
+![Alt text for accessibility](/img/post-slug/image-name.png)
+:::
+```
+
+**Figure-Fence Guidelines**:
+
+-   **Unique IDs**: Use format `category:description` (e.g., `calendar:monthly-view`, `arch:dependency-graph`)
+-   **Descriptive titles**: Clear, concise titles that explain what the figure shows
+-   **Detailed captions**: Explain the purpose, context, or insights the image provides
+-   **Alt text**: Include proper alt text within the image markdown for accessibility
+-   **Sequential naming**: For multiple related images, use consistent naming (image1, image2, image3)
+
+**Referencing figures**:
+
+Use `:ref{id="category:description"}` to reference figures in your text. Example:
+
+```markdown
+:::figure-fence{id="arch:pipeline" title="Data Pipeline" caption="Shows data flow through the system"}
+![Pipeline diagram](/img/pipeline.png)
+:::
+
+As shown in :ref{id="arch:pipeline"}, data flows from left to right.
+```
+
+**Frontmatter setup required**:
+
+```yaml
+figurens:
+    arch: Architecture
+    flow: Data Flow
+    code: Code Example
+    img: Image
+```
+
+**When to use figure-fence vs standard images**:
+
+-   **Use figure-fence for**: Diagrams, screenshots, charts, technical illustrations that need proper captioning and numbering
+-   **Use standard markdown for**: Simple decorative images, icons, or images that don't need formal figure treatment
+
 **Style guidelines for custom elements**:
 
 -   Keep inline callouts short and punchy (1-2 sentences max)
 -   Margin notes can be longer and more conversational
 -   Use margin notes for the kind of thing you'd say in parentheses, but expanded
 -   Don't overuse - these should enhance, not distract from the main narrative
+-   Always prefer figure-fence over standard markdown images for technical content
 
 ## Curiosity Gaps
 

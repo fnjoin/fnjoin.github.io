@@ -265,14 +265,29 @@ const project = new MonorepoTsProject({
 
 ### Figures and Captions
 
-For complex examples, use figure references:
+For complex examples, use figure-fence blocks with references:
 
 ````markdown
-```{#fig:code-init .bash caption="Bootstrapping command"}
+:::figure-fence{id="code:bootstrap" title="Project Bootstrap Command" caption="Initial setup command for creating a new project with PDK"}
+
+```bash
 mkdir prototype-with-pdk
 npm install -g pnpm
 ```
+
+:::
+
+Later in the text, reference it with: :ref{id="code:bootstrap"}
 ````
+
+**Frontmatter setup required:**
+
+```yaml
+figurens:
+    code: Code Example
+    arch: Architecture
+    flow: Data Flow
+```
 
 ````
 
@@ -422,3 +437,129 @@ Keep a running list of post ideas based on:
 -   Interesting patterns you noticed
 
 Remember: The best posts come from real experiences, not theoretical knowledge.
+
+## Mermaid Diagrams
+
+### Overview
+
+This blog supports Mermaid diagrams with enhanced AWS icon support. The implementation includes custom icon packs that work in controlled environments (this blog) but may fall back to basic icons on platforms like GitHub.
+
+### Basic Usage
+
+Use standard Mermaid syntax in fenced code blocks:
+
+````markdown
+```mermaid
+graph TD
+    A[Start] --> B{Decision}
+    B -->|Yes| C[Action 1]
+    B -->|No| D[Action 2]
+```
+````
+
+### Architecture Diagrams with AWS Icons
+
+The blog includes AWS icon support through the `logos` and `simple-icons` icon packs:
+
+````markdown
+```mermaid
+architecture-beta
+    group vpc(cloud)[VPC]
+        group public(internet)[Public Subnet] in vpc
+            service alb(logos:aws)[Load Balancer] in public
+        group private(server)[Private Subnet] in vpc
+            service ecs(logos:aws-ec2)[ECS Cluster] in private
+            service rds(logos:aws-rds)[Database] in private
+
+    alb:B --> T:ecs
+    ecs:R --> L:rds
+```
+````
+
+### Available Icon Packs
+
+**Logos Icon Pack** (`logos:icon-name`):
+
+-   **AWS Services**: `logos:aws`, `logos:aws-s3`, `logos:aws-lambda`, `logos:aws-ec2`, `logos:aws-rds`, `logos:aws-api-gateway`, `logos:aws-cloudfront`, `logos:aws-dynamodb`, `logos:aws-iam`
+-   **Other Tech**: `logos:docker`, `logos:kubernetes`, `logos:react`, `logos:typescript`, `logos:nodejs`, `logos:python`, `logos:java`
+-   **Full list**: Browse at [iconify.design/icon-sets/logos](https://iconify.design/icon-sets/logos/)
+
+**Simple Icons Pack** (`simple-icons:icon-name`):
+
+-   **Platforms**: `simple-icons:github`, `simple-icons:gitlab`, `simple-icons:docker`, `simple-icons:kubernetes`
+-   **Languages**: `simple-icons:javascript`, `simple-icons:typescript`, `simple-icons:python`, `simple-icons:java`, `simple-icons:go`
+-   **Full list**: Browse at [iconify.design/icon-sets/simple-icons](https://iconify.design/icon-sets/simple-icons/)
+
+### Built-in Mermaid Icons (Always Available)
+
+For maximum compatibility across platforms, use Mermaid's built-in icons:
+
+-   `cloud` - AWS accounts, cloud services
+-   `database` - RDS, DynamoDB, S3
+-   `server` - EC2, Lambda, ECS
+-   `internet` - API Gateway, CloudFront, Load Balancers
+-   `disk` - Storage services
+
+### Icon Reference Quick Guide
+
+| Service Type  | Custom Icon             | Built-in Fallback | Usage                                             |
+| ------------- | ----------------------- | ----------------- | ------------------------------------------------- |
+| AWS Account   | `logos:aws`             | `cloud`           | `service aws(logos:aws)[AWS Account]`             |
+| S3 Bucket     | `logos:aws-s3`          | `database`        | `service s3(logos:aws-s3)[S3 Bucket]`             |
+| Lambda        | `logos:aws-lambda`      | `server`          | `service lambda(logos:aws-lambda)[Lambda]`        |
+| EC2           | `logos:aws-ec2`         | `server`          | `service ec2(logos:aws-ec2)[EC2 Instance]`        |
+| RDS           | `logos:aws-rds`         | `database`        | `service rds(logos:aws-rds)[Database]`            |
+| API Gateway   | `logos:aws-api-gateway` | `internet`        | `service api(logos:aws-api-gateway)[API Gateway]` |
+| Load Balancer | `logos:aws`             | `internet`        | `service alb(logos:aws)[Load Balancer]`           |
+
+### Best Practices
+
+1. **Always provide fallbacks**: Design diagrams that work with built-in icons
+2. **Test across platforms**: Custom icons work here but may not render on GitHub
+3. **Use semantic grouping**: Group related services even when icons aren't perfect
+4. **Label clearly**: Good labels matter more than perfect icons
+
+### Platform Compatibility
+
+-   ✅ **This blog**: Full AWS icon support with custom icon packs
+-   ❌ **GitHub/GitLab**: Custom icons fall back to question marks - use built-in icons
+-   ⚠️ **Other platforms**: Mixed results - test before relying on custom icons
+
+### Hybrid Approach Example
+
+Create diagrams that work everywhere by using built-in icons with clear labels:
+
+````markdown
+```mermaid
+architecture-beta
+    group aws(cloud)[AWS Account]
+        service s3(database)[S3 Data Lake] in aws
+        service lambda(server)[Lambda Processor] in aws
+        service api(internet)[API Gateway] in aws
+
+    api:B --> T:lambda
+    lambda:R --> L:s3
+```
+````
+
+### Finding More Icons
+
+**Icon Search Resources:**
+
+-   **Iconify Icon Sets**: [iconify.design/icon-sets](https://iconify.design/icon-sets/) - Browse all available icon packs
+-   **Logos Collection**: [iconify.design/icon-sets/logos](https://iconify.design/icon-sets/logos/) - Tech company and service logos
+-   **Simple Icons**: [iconify.design/icon-sets/simple-icons](https://iconify.design/icon-sets/simple-icons/) - Brand icons for popular services
+-   **Icon Search**: [icones.js.org](https://icones.js.org/) - Search across all Iconify icon sets
+
+**Usage Pattern**: `pack-name:icon-name`
+
+-   Example: `logos:aws-s3`, `simple-icons:docker`, `logos:kubernetes`
+
+### Technical Implementation
+
+The blog's `MermaidDiagram` component automatically registers these icon packs:
+
+-   `@iconify-json/logos` - Tech logos and service icons
+-   `@iconify-json/simple-icons` - Brand and platform icons
+
+Icons are loaded on-demand when diagrams are rendered, with graceful fallback to built-in icons if loading fails.
