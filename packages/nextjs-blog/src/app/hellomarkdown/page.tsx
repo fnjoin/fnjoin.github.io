@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import React, { ReactNode } from "react";
 
 import {
@@ -10,6 +11,17 @@ import {
     TocFromMarkdown,
     getMarkdown,
 } from "@/lib/markdowncomponents";
+
+export function generateMetadata(): Metadata {
+    return {
+        title: "Hello Markdown - Style Testing",
+        description: "A test page for markdown styling components",
+        robots: {
+            index: false,
+            follow: false,
+        },
+    };
+}
 
 export default function HelloMarkdownPage(): ReactNode {
     const art = getMarkdown();
