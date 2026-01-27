@@ -105,6 +105,11 @@ export function generateMetadata({ params }: Params): Metadata {
             creator: post.author_detail.twitter,
             title,
             description,
+            images: post.ogImage?.url
+                ? [post.ogImage.url]
+                : post.coverImage?.imageSrc
+                  ? [post.coverImage.imageSrc]
+                  : ["/fnjoin.png"],
         },
     };
 }
