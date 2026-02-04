@@ -16,6 +16,7 @@ import {
     Tags,
 } from "@/lib/markdowncomponents";
 import { BlogRepository } from "@/lib/repository";
+import { getOptimizedImageUrl } from "@/lib/image-url-helper";
 
 export default async function Post({ params }: Params) {
     const repository = BlogRepository.fromCwd();
@@ -95,9 +96,9 @@ export function generateMetadata({ params }: Params): Metadata {
             url: `https://fnjoin.com/${post.slug}/`,
             type: "article",
             images: post.ogImage?.url
-                ? [post.ogImage.url]
+                ? [getOptimizedImageUrl(post.ogImage.url)]
                 : post.coverImage?.imageSrc
-                  ? [post.coverImage.imageSrc]
+                  ? [getOptimizedImageUrl(post.coverImage.imageSrc)]
                   : ["/fnjoin.png"],
         },
         twitter: {
@@ -106,9 +107,9 @@ export function generateMetadata({ params }: Params): Metadata {
             title,
             description,
             images: post.ogImage?.url
-                ? [post.ogImage.url]
+                ? [getOptimizedImageUrl(post.ogImage.url)]
                 : post.coverImage?.imageSrc
-                  ? [post.coverImage.imageSrc]
+                  ? [getOptimizedImageUrl(post.coverImage.imageSrc)]
                   : ["/fnjoin.png"],
         },
     };

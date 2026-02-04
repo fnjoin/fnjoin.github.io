@@ -13,6 +13,7 @@ import {
     Tags,
 } from "@/lib/markdowncomponents";
 import { PageRepository } from "@/lib/repository";
+import { getOptimizedImageUrl } from "@/lib/image-url-helper";
 
 type Params = {
     params: {
@@ -74,9 +75,9 @@ export function generateMetadata({ params }: Params): Metadata {
                 url: `https://fnjoin.com/${post.slug}/`,
                 type: "article",
                 images: post.ogImage?.url
-                    ? [post.ogImage.url]
+                    ? [getOptimizedImageUrl(post.ogImage.url)]
                     : post.coverImage?.imageSrc
-                      ? [post.coverImage.imageSrc]
+                      ? [getOptimizedImageUrl(post.coverImage.imageSrc)]
                       : ["/fnjoin.png"],
             },
         };

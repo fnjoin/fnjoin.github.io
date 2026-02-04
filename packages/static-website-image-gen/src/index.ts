@@ -23,13 +23,13 @@ async function processHtmlFiles(
         const dom = new JSDOM(htmlContent);
         const images = dom.window.document.querySelectorAll("img");
 
+        const imageSources = new Set<string>();
+
         // Process each img tag
         for (const img of images) {
             // console.log("found img", img);
             const src = img.getAttribute("src");
             const srcset = img.getAttribute("srcset");
-
-            const imageSources = new Set<string>();
 
             if (src) imageSources.add(src);
             if (srcset) {
@@ -38,16 +38,27 @@ async function processHtmlFiles(
                     imageSources.add(srcInfo);
                 });
             }
+        }
 
-            // Process each image source
-            for (const source of imageSources) {
-                await processImageSource(
-                    source,
-                    originDirectory,
-                    outputDirectory,
-                    websiteBasePath,
-                );
+        // Process meta tags for OG and Twitter images
+        const metaTags = dom.window.document.querySelectorAll(
+            'meta[property="og:image"], meta[name="twitter:image"]',
+        );
+        for (const meta of metaTags) {
+            const content = meta.getAttribute("content");
+            if (content) {
+                imageSources.add(content);
             }
+        }
+
+        // Process each image source
+        for (const source of imageSources) {
+            await processImageSource(
+                source,
+                originDirectory,
+                outputDirectory,
+                websiteBasePath,
+            );
         }
     }
 }
@@ -62,7 +73,24 @@ async function processImageSource(
     // console.log("processing image source", source);
     const { dir, name } = path.parse(source);
     const match = name.match(/(.*?)\.w(\d+)q(\d+)$/);
+
+    // Handle raw image paths (from meta tags) - generate a default transformed version
     if (!match) {
+        // Check if this is a raw image path (e.g., /img/post/image.png)
+        const ext = path.extname(source);
+        if ([".jpg", ".jpeg", ".png", ".webp"].includes(ext.toLowerCase())) {
+            console.log(`Processing raw meta tag image: ${source}`);
+            // Generate a standard size for OG/Twitter images (1200px is typical for social)
+            await processRawImageSource(
+                source,
+                originDirectory,
+                outputDirectory,
+                websiteBasePath,
+                1200,
+                85,
+            );
+            return;
+        }
         console.warn(`Invalid image name: ${name}`);
         console.warn(`Skipping image ${source}`);
         return;
@@ -117,6 +145,61 @@ async function processImageSource(
         .resize(parseInt(width), null)
         .toFormat(format as keyof FormatEnum, { quality: parseInt(quality) })
         .toFile(outputPath);
+}
+
+// Function to process raw image sources (from meta tags)
+async function processRawImageSource(
+    source: string,
+    originDirectory: string,
+    outputDirectory: string,
+    websiteBasePath: string | undefined,
+    width: number,
+    quality: number,
+) {
+    const { dir, name, ext } = path.parse(source);
+    const originPath = path.join(
+        originDirectory,
+        websiteBasePath && websiteBasePath.startsWith("/")
+            ? dir.replace(websiteBasePath, "")
+            : dir,
+        name + ext,
+    );
+
+    // Convert to webp for meta tags
+    const webpName = name + ".webp";
+    const webpSource = path.join(dir, webpName);
+    const outputPath = path.join(
+        outputDirectory,
+        websiteBasePath && websiteBasePath.startsWith("/")
+            ? webpSource.replace(websiteBasePath, "")
+            : webpSource,
+    );
+
+    // Find the original file
+    const originalFile = glob.sync(`${originPath}`)[0];
+    if (!originalFile) {
+        console.warn(
+            "Broken meta tag image!",
+            `original file not found for ${source} at ${originPath}`,
+        );
+        return;
+    }
+
+    // return if the output file exists already
+    if (fs.existsSync(outputPath)) {
+        return;
+    }
+
+    // Ensure the output directory exists
+    fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+
+    // Convert to webp for better performance
+    await sharp(originalFile)
+        .resize(width, null)
+        .webp({ quality })
+        .toFile(outputPath);
+
+    console.log(`Generated webp for meta tag: ${webpSource}`);
 }
 
 export default async function main(): Promise<void> {
