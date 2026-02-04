@@ -6,6 +6,7 @@ import Copyright from "@/app/_components/copy";
 import { PostBody } from "@/app/_components/post-body";
 import { ReadingStats } from "@/app/_components/reading-stats";
 import ScrollTracker from "@/app/_components/scrolltracking";
+import { getOptimizedImageUrl } from "@/lib/image-url-helper";
 import { getFirstNWordsFromMarkdown } from "@/lib/markdown-utils";
 import {
     Article,
@@ -16,7 +17,6 @@ import {
     Tags,
 } from "@/lib/markdowncomponents";
 import { BlogRepository } from "@/lib/repository";
-import { getOptimizedImageUrl } from "@/lib/image-url-helper";
 
 export default async function Post({ params }: Params) {
     const repository = BlogRepository.fromCwd();

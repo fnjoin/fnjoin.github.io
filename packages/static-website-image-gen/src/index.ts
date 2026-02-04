@@ -70,19 +70,31 @@ async function processImageSource(
     outputDirectory: string,
     websiteBasePath?: string,
 ) {
-    // console.log("processing image source", source);
-    const { dir, name } = path.parse(source);
+    // Strip domain from full URLs (from meta tags with metadataBase)
+    let cleanSource = source;
+    if (source.startsWith("http://") || source.startsWith("https://")) {
+        try {
+            const url = new URL(source);
+            cleanSource = url.pathname;
+        } catch (e) {
+            console.warn(`Failed to parse URL: ${source}`);
+            return;
+        }
+    }
+
+    // console.log("processing image source", cleanSource);
+    const { dir, name } = path.parse(cleanSource);
     const match = name.match(/(.*?)\.w(\d+)q(\d+)$/);
 
     // Handle raw image paths (from meta tags) - generate a default transformed version
     if (!match) {
         // Check if this is a raw image path (e.g., /img/post/image.png)
-        const ext = path.extname(source);
+        const ext = path.extname(cleanSource);
         if ([".jpg", ".jpeg", ".png", ".webp"].includes(ext.toLowerCase())) {
-            console.log(`Processing raw meta tag image: ${source}`);
+            console.log(`Processing raw meta tag image: ${cleanSource}`);
             // Generate a standard size for OG/Twitter images (1200px is typical for social)
             await processRawImageSource(
-                source,
+                cleanSource,
                 originDirectory,
                 outputDirectory,
                 websiteBasePath,
@@ -92,12 +104,12 @@ async function processImageSource(
             return;
         }
         console.warn(`Invalid image name: ${name}`);
-        console.warn(`Skipping image ${source}`);
+        console.warn(`Skipping image ${cleanSource}`);
         return;
     }
 
     // get ext from source
-    const format = path.extname(source).slice(1);
+    const format = path.extname(cleanSource).slice(1);
     // console.log("format", format);
     const [, baseName, width, quality] = match;
     const originPath = path.join(
@@ -110,8 +122,8 @@ async function processImageSource(
     const outputPath = path.join(
         outputDirectory,
         websiteBasePath && websiteBasePath.startsWith("/")
-            ? source.replace(websiteBasePath, "")
-            : source,
+            ? cleanSource.replace(websiteBasePath, "")
+            : cleanSource,
     );
 
     // Find the original file with extension jpg, png, etc.
@@ -156,7 +168,19 @@ async function processRawImageSource(
     width: number,
     quality: number,
 ) {
-    const { dir, name, ext } = path.parse(source);
+    // Strip domain if present (meta tags include full URLs)
+    let cleanSource = source;
+    if (source.startsWith("http://") || source.startsWith("https://")) {
+        try {
+            const url = new URL(source);
+            cleanSource = url.pathname;
+        } catch (e) {
+            console.warn(`Failed to parse URL: ${source}`);
+            return;
+        }
+    }
+
+    const { dir, name, ext } = path.parse(cleanSource);
     const originPath = path.join(
         originDirectory,
         websiteBasePath && websiteBasePath.startsWith("/")
@@ -165,8 +189,8 @@ async function processRawImageSource(
         name + ext,
     );
 
-    // Convert to webp for meta tags
-    const webpName = name + ".webp";
+    // Convert to webp for meta tags with width/quality in filename
+    const webpName = name + ".w" + width + "q" + quality + ".webp";
     const webpSource = path.join(dir, webpName);
     const outputPath = path.join(
         outputDirectory,

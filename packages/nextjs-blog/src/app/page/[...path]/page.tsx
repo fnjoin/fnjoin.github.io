@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import React from "react";
 import Header from "../../_components/header";
 import { PostBody } from "@/app/_components/post-body";
+import { getOptimizedImageUrl } from "@/lib/image-url-helper";
 import { getFirstNWordsFromMarkdown } from "@/lib/markdown-utils";
 import {
     Article,
@@ -13,7 +14,6 @@ import {
     Tags,
 } from "@/lib/markdowncomponents";
 import { PageRepository } from "@/lib/repository";
-import { getOptimizedImageUrl } from "@/lib/image-url-helper";
 
 type Params = {
     params: {
