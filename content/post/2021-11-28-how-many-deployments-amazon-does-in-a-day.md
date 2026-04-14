@@ -30,7 +30,7 @@ How long will it take different sized teams with different deployment velocities
 | 55               | 909.1            | 259.7   | 90.9    | 33.7     | **12.3** | **4.5**  | **1.7**  | **0.6**  |
 | 148              | 337.8            | 96.5    | 33.8    | **12.5** | **4.6**  | **1.7**  | **0.6**  | **0.2**  |
 
-Across the horizontal access we have hypothetical team size. Down the vertical access we have number of changes per engineer per year. Both axis increase exponentially. The cells use the following formula to estimate the number of years it would take to reach one million deployments:
+Across the horizontal axis we have hypothetical team size. Down the vertical axis we have number of changes per engineer per year. Both axis increase exponentially. The cells use the following formula to estimate the number of years it would take to reach one million deployments:
 
 $$
 \frac{10^6}{commits * engineers * deployments}
