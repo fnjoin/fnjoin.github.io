@@ -397,7 +397,7 @@ Here are some example criteria to consider:
 -   You're already running Kubernetes.
 -   There is a business benefit to updating configuration without restarting your application.
 -   The time to deploy a configuration update is much faster than simply deploying a new container image.
--   You prefer not to run a dedicated configuation server in addition to your application [^3].
+-   You prefer not to run a dedicated configuration server in addition to your application [^3].
 -   Your application configuration is contextual to the Kubernetes namespace in which it runs and you operate many namespaces with different configurations deployed.
 -   Multiple applications running in the same namespace share configuration values.
 -   Configuration is committed to your source control system.
@@ -411,5 +411,4 @@ You may have additional criteria for your environment. It's good to think it thr
 
 Hope this helps you on your journey with Spring Boot and Kuberenetes. Please reach out if you'd like to hear more about these topics.
 
-[^1]:
-    `--sync-frequency` is a [kubelet config option](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#mounted-configmaps-are-updated-automatically) - it defaults to 1m.
+[^1]: `--sync-frequency` is a [kubelet config option](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#mounted-configmaps-are-updated-automatically) - it defaults to 1m.
