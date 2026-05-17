@@ -189,26 +189,28 @@ Current authors:
 
 ## Content Style Guidelines
 
-### Voice & Tone (from style.md)
+### Voice & Tone (Authentic Style)
 
--   **Enthusiastic without being annoying**: Share discoveries, don't preach
--   **Self-deprecating**: Show mistakes and learning process
--   **Conversational**: Write like talking to a colleague over coffee
+-   **Conversational discovery sharing**: Write about what you actually learned
+-   **Self-aware and relatable**: Like talking to a colleague who gets the struggle
 -   **Humble expertise**: You know things, but you're still figuring it out
+-   **Natural humor**: Emerges from shared developer experiences, not forced techniques
 
-### Structure: AIDA Framework
+### Structure: Natural Flow
 
-1. **Attention** (1-3 sentences): Hook with relatable pain or surprising statement
-2. **Interest** (2-4 paragraphs): Explain why the problem exists, reveal underlying principle
-3. **Desire** (3-6 paragraphs): Paint before/after picture with specific details
-4. **Action** (2-4 paragraphs): Tell them exactly what to do next
+Posts naturally follow problem → insight → transformation → action without rigid formulas:
+
+1. **Opening**: Start with a relatable moment or realization
+2. **Insight**: Share the mental model shift or discovery
+3. **Transformation**: Show before/after with specific, concrete details
+4. **Action**: Clear, specific next steps with engagement question
 
 ### Content Elements
 
 -   **Specific details**: Include actual numbers, tool names, scenarios
 -   **Code examples**: Use proper markdown code blocks with language hints
--   **Metaphors**: Ground in familiar concepts (IaC, cattle vs pets)
--   **Show, don't tell**: Include examples, not just descriptions
+-   **Margin notes**: For genuine asides and additional context
+-   **Natural transitions**: Let ideas flow into each other organically
 
 ### Cliches to avoid
 

@@ -4,113 +4,112 @@
 
 ### Core Principles
 
--   **Enthusiastic without being annoying**: Share discoveries, don't preach truths
--   **Self-deprecating**: Show your mistakes and learning process
--   **Conversational**: Write like you're talking to a colleague over coffee, not presenting at a conference
+-   **Authentic discovery sharing**: Write about what you actually learned, not what you think you should teach
+-   **Conversational and self-aware**: Like talking to a colleague who gets the struggle
 -   **Humble expertise**: You know things, but you're still figuring it out too
+-   **Relatable frustration**: Share the real pain points developers face
 
-### What to Avoid
+### Natural Voice Patterns
 
--   ❌ "You should do X" → ✅ "I started doing X and here's what changed"
--   ❌ "This is the right way" → ✅ "This worked for me, curious if others have tried it"
--   ❌ "If you're not doing X, you're doing it wrong" → ✅ "I wasn't doing X and it was costing me hours"
--   ❌ Lecturer tone → ✅ Discovery-sharing tone
+Your authentic voice naturally avoids preachy language. Trust these instincts:
 
-### Humor Guidelines
+-   "I discovered something that changed..." (natural discovery)
+-   "Yeah. That was me. Daily." (honest acknowledgment)
+-   "I know, I know. You probably think..." (conversational awareness)
+-   "Here's what I realized..." (personal insight)
 
--   **Use self-deprecation**: Show yourself making mistakes, having frustrations
--   **Embrace absurdist details**: "flowerbed on the first floor" not just "out the window"
--   **Exaggerate frustrations for effect**: "20 minutes arguing with a chatbot" paints a funnier picture than "I had issues"
--   **Create relatable scenarios**: The "Dave on vacation" type of specificity everyone recognizes
--   **End with knowing winks**: Acknowledge we're all in the same boat
--   **Avoid**: Puns, dad jokes, forced cleverness, anything that feels like you're trying too hard
+### Humor Style
 
-## Structure: AIDA Framework
+Your humor works because it's grounded in shared developer experiences:
 
-Every substantial post should follow Attention → Interest → Desire → Action
+-   **Self-aware observations**: "like some kind of demented golden retriever that only knows one trick"
+-   **Relatable developer pain**: "I'd spend an entire afternoon fixing indentation while questioning my life choices"
+-   **Conversational asides**: Use parenthetical thoughts naturally, not as a forced technique
+-   **Shared frustrations**: Everyone knows the "arguing with a chatbot" experience
 
-### Attention (Opening)
+**What works**: Humor that emerges from real situations
+**What doesn't**: Forced absurdist details or trying to be funny for its own sake
 
-**Goal**: Hook in 1-3 sentences with relatable pain or surprising statement
+## Structure: AIDA Framework (Subtle by Design)
 
-**Patterns that work**:
+Use AIDA as your structural backbone during writing, then polish until the framework becomes invisible to readers. The goal is posts that feel conversational while hitting all the persuasive beats.
 
--   Specific, embarrassing moment: "I spent 20 minutes arguing with a chatbot about TypeScript"
--   Surprising reversal: "The thing that improved my AI output isn't what you'd expect"
--   Relatable frustration: "You know that moment when..."
+### Attention (Opening Hook)
 
-**Length**: 1-3 short sentences or a single short paragraph
+**Purpose**: Stop the scroll with a relatable moment or surprising realization
 
-**Test**: Would this make someone stop scrolling?
+**Your effective patterns**:
+
+-   "I stopped fighting my AI coding assistant when I realized..."
+-   "There's a skill that I lean on more than prompt engineering..."
+-   "I discovered something that changed how I document solutions..."
+
+**Writing process**: Start with the most relatable pain point or "aha" moment
+**Polish phase**: Make it feel like natural conversation, not a hook
 
 ### Interest (The Insight)
 
-**Goal**: Explain _why_ the problem exists or reveal the underlying principle
+**Purpose**: Explain why the problem exists and reveal your mental model shift
 
-**Patterns that work**:
+**Your natural transitions**:
 
--   "Then I realized..."
--   "What I discovered was..."
--   "The core insight is..."
--   "What changed everything was..."
--   "The missing piece was..."
+-   "Then I realized something that changed everything..."
+-   "Here's what I realized after months of..."
+-   "That's when I started experimenting with something different..."
 
-**Avoid overused phrases**:
-
--   "Here's the thing nobody tells you..." (overused, sounds clickbaity)
--   "Here's the kicker..." (cliche)
--   "You won't believe..." (too sensational)
-
-**What to include**:
-
--   The mental model shift
--   Why the obvious approach doesn't work
--   What you misunderstood before
-
-**Length**: 2-4 paragraphs
-
-**Test**: Does this make the reader go "Ohhh, that's why"?
+**Writing process**: Focus on the "why" - what causes the problem, what you misunderstood
+**Polish phase**: Weave insights into the narrative flow without announcing them
 
 ### Desire (The Transformation)
 
-**Goal**: Paint the before/after picture with specific, concrete details
+**Purpose**: Make readers want what you have through specific before/after contrast
 
-**Patterns that work**:
+**Your effective approach**:
 
--   Explicit "Before/After" sections
--   Specific examples of what changed
--   Concrete metrics or observable improvements
+-   Use actual dialogue or scenarios ("Before: 'Can you make this a TypeScript lambda?'")
+-   Include specific tools, numbers, timeframes
+-   Show the emotional shift ("I spend time on features, not re-explaining TypeScript")
 
-**What to include**:
+**Writing process**: Paint vivid before/after pictures with concrete details
+**Polish phase**: Let the contrast speak for itself without labeling it
 
--   Actual dialogue or prompts (verbatim when possible)
--   Specific time savings or quality improvements
--   The emotional shift ("I spend time on features, not...")
+### Action (Next Steps)
 
-**Length**: 3-6 paragraphs with clear before/after contrast
+**Purpose**: Give clear, specific actions readers can take immediately
 
-**Test**: Does this make the reader want what you have?
+**Your natural patterns**:
 
-### Action (The Next Step)
-
-**Goal**: Tell them exactly what to do next, remove all friction
-
-**Patterns that work**:
-
+-   "Your specific first steps:"
 -   "Try this tomorrow:"
--   "Your specific first step:"
--   "Next time you [common scenario], do [specific action]"
+-   "Next time you [scenario], do [action]"
 
-**What to include**:
+**Writing process**: Define one clear, achievable next step
+**Polish phase**: Make it feel like friendly advice, not a call-to-action
+**Always end with**: An engagement question that invites community discussion
 
--   One specific, achievable action
--   When to do it ("tomorrow morning", "next time you start a project")
--   Optional: link to detailed guide
--   Engagement question to build community
+## Framework Integration Guidelines
 
-**Length**: 2-4 paragraphs, with the action clearly stated upfront
+**During writing**: Use AIDA beats to structure your thinking and ensure you hit all persuasive elements
 
-**Test**: Could someone do this tomorrow without asking clarifying questions?
+**During editing**: Polish transitions until the framework disappears into natural conversation
+
+**Final check**: Reader should feel like they're learning from a colleague's discovery, not being sold to
+
+**Use margin notes**: For genuine asides that don't interrupt the AIDA flow
+
+**Natural transitions**: Let AIDA beats flow into each other organically - no section breaks or announcements
+
+**Always end with**: An engagement question that invites community discussion
+
+## Content Flow Guidelines
+
+**Trust your instincts**: Your posts naturally hit these beats without forcing structure
+
+**Use margin notes**: For genuine asides and additional context that doesn't interrupt the main flow
+
+**Conversational acknowledgments**: "I know, I know..." and similar phrases work well for you
+
+**Natural transitions**: Don't force section breaks—let ideas flow into each other
 
 ## Paragraph & Sentence Style
 
@@ -344,28 +343,34 @@ After: The structure exists. The AI works within it. I spend time on features, n
 
 ## Checklist Before Publishing
 
--   [ ] Does the opening hook in 3 sentences or less?
--   [ ] Is there a clear insight/mental model shift?
--   [ ] Do I show my mistakes/learning process?
--   [ ] Is there specific before/after evidence?
--   [ ] Does the CTA tell them exactly what to do next?
--   [ ] Would Steve Yegge find this funny?
--   [ ] Am I sharing a discovery, not preaching?
--   [ ] Did I remove any "you should" language?
+### AIDA Structure Check
+
+-   [ ] **Attention**: Does the opening hook with a relatable moment or realization?
+-   [ ] **Interest**: Is there a clear insight or mental model shift explained?
+-   [ ] **Desire**: Do I show specific before/after transformation with concrete details?
+-   [ ] **Action**: Are there clear, actionable next steps readers can take?
+
+### Voice & Polish Check
+
+-   [ ] Does it feel like natural conversation, not a sales pitch?
+-   [ ] Am I sharing genuine discovery from experience, not theoretical knowledge?
+-   [ ] Is the AIDA framework invisible to readers (no obvious section breaks)?
 -   [ ] Are there enough specific details (numbers, tools, scenarios)?
 -   [ ] Does it end with an engagement question?
--   [ ] Is the tone enthusiastic but humble?
+-   [ ] Is the tone conversational and authentic?
 -   [ ] Would I want to read this if someone else wrote it?
+-   [ ] Does it feel like me talking to a colleague who gets the struggle?
 
-## Quick Reference: Voice Patterns
+## Quick Reference: Natural Voice Patterns
 
-**Instead of this** → **Write this**
+**Your authentic patterns** (keep using these):
 
--   "You need to" → "I started doing"
--   "The best practice is" → "What worked for me was"
--   "Everyone should" → "I was missing"
--   "This is wrong" → "I was doing this and here's what happened"
--   "Let me teach you" → "I discovered"
--   "The solution is" → "What changed for me was"
+-   "I discovered something that changed..." → Natural discovery sharing
+-   "Yeah. That was me. Daily." → Honest acknowledgment
+-   "I know, I know. You probably think..." → Conversational awareness
+-   "Here's what I realized..." → Personal insight
+-   "That's when I started experimenting..." → Natural transition
 
-Remember: You're a fellow developer sharing what you learned, not a guru dispensing wisdom from the mountain.
+**Two-phase approach**: Use AIDA to structure during writing, then polish until it feels like natural conversation.
+
+Remember: You're sharing what you learned with someone who gets the struggle, using a proven persuasive structure that stays invisible.
